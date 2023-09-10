@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native';
 import { Link, Stack } from 'expo-router';
+import styles from '../styles/Home.styles';
 
 export default function Home() {
     return (
@@ -9,9 +10,8 @@ export default function Home() {
                     headerTitle: 'My Dreams'
                 }}
             />
-            <View>
-                <Text>Home</Text>
-                <Link href="/add">Add</Link>
+            <View style={styles.container}>
+                <Link href="/add" style={styles.addButton}>+</Link>
             </View>
         </>
     );

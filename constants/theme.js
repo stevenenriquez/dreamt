@@ -1,11 +1,14 @@
 const COLORS = {
-    primary: '#FFC700',
+    primary: '#034B03',
     secondary: '#CDCDD2',
 
     textPrimary: '#000000',
     textSecondary: '#FFFFFF',
 
-    backgroundPrimary: '#FFFFFF',
+    buttonPrimary: '#5A5A5A',
+    buttonSecondary: '#FFFFFF',
+
+    backgroundPrimary: '#000000',
     backgroundSecondary: '#F2F2F2',
 
     borderPrimary: '#F2F2F2',

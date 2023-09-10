@@ -1,7 +1,5 @@
-import { Slot, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import { COLORS } from '../constants/theme';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 export default function Layout() {
     return (
@@ -13,17 +11,14 @@ export default function Layout() {
                         color: COLORS.textPrimary
                     },
                     headerShadowVisible: false,
-                    headerTitle: 'Homeeeeee',
-                    headerTintColor: COLORS.primary,
+                    headerTitle: 'Dreamt',
+                    headerTintColor: COLORS.white,
                     headerTitleStyle: {
                         color: COLORS.white,
-                        fontWeight: 'bold',
+                        fontFamily: 'monospace'
                     },
                 }}
             />
-            <Header />
-            <Slot />
-            <Footer />
         </>
     );
 
