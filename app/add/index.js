@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { Stack } from 'expo-router';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { Stack, router } from 'expo-router';
 import styles from '../../styles/AddDream.styles';
-import { TextInput } from 'react-native'; 
 import { COLORS } from '../../constants/theme';
-import { router } from 'expo-router';
 import { createDream } from '../../utils/db';
 
 export default function AddPage() {
