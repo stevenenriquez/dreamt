@@ -3,38 +3,40 @@ import { COLORS } from "../../constants/theme";
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: COLORS.black,
-        padding: 20,
+        borderRadius: 10,
+        borderColor: COLORS.borderSecondary,
+        borderWidth: 1,
+        padding: 10,
+        margin: 10
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: 5,
     },
     title: {
         fontSize: 20,
         color: COLORS.white,
         fontFamily: 'monospace',
-        width: '80%',
+        fontWeight: 'bold',
     },
     date: {
         opacity: 0.8,
         color: COLORS.white,
         fontFamily: 'monospace',
-        paddingTop: 10
+        marginBottom: 5
     },
     text: {
         color: COLORS.white,
         fontFamily: 'monospace',
     },
     button: {
-        borderColor: COLORS.white,
-        borderWidth: 1,
-        borderRadius: 10,
-        width: 33,
-        padding: 10,
-        marginTop: 5,
+        marginRight: 10
+    },
+    deleteButtonText: {
+        color: COLORS.secondary,
+        fontWeight: 'bold',
     },
     link: {
         flex: 1,

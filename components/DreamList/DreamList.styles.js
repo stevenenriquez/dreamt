@@ -3,9 +3,7 @@ import { COLORS } from "../../constants/theme";
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: COLORS.black,
-        padding: 20,
+        margin: 5,
     },
     text: {
         color: COLORS.white,
