@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.black,
     },
     addButton: {
-        color: COLORS.white,
+        color: COLORS.black,
         fontSize: 30,
         position: 'absolute',
         bottom: 20,
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
         padding: 10,
         width: 50,
         textAlign: 'center',
-        backgroundColor: COLORS.primary,
+        backgroundColor: COLORS.white,
         borderRadius: 30
     }
 });

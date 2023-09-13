@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
-import { COLORS } from '../constants/theme';
+import { COLORS, FONT } from '../constants/theme';
+import { APP_NAME } from '../constants/constants';
 
 export default function Layout() {
     return (
@@ -8,14 +9,14 @@ export default function Layout() {
                 screenOptions={{
                     headerStyle: {
                         backgroundColor: COLORS.backgroundPrimary,
-                        color: COLORS.textPrimary
+                        color: COLORS.textPrimariy
                     },
                     headerShadowVisible: false,
-                    headerTitle: 'Dreamt',
+                    headerTitle: APP_NAME,
                     headerTintColor: COLORS.white,
                     headerTitleStyle: {
                         color: COLORS.white,
-                        fontFamily: 'monospace'
+                        fontFamily: FONT.fontFamily
                     },
                 }}
             />

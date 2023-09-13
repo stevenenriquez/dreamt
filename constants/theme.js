@@ -9,23 +9,30 @@ const COLORS = {
     buttonSecondary: '#FFFFFF',
 
     backgroundPrimary: '#000000',
-    backgroundSecondary: '#F2F2F2',
+    backgroundSecondary: '#FFFFFF',
 
-    borderPrimary: '#F2F2F2',
+    borderPrimary: '#FFFFFF',
     borderSecondary: '#CDCDD2',
 
     error: '#FF0000',
     success: '#00FF00',
     warning: '#FFC700',
-    info: '#0000FF',
+    info: '#00FFFF',
 
-    transparent: 'transparent',
     black: '#000000',
     white: '#FFFFFF',
 }
 
-const FONT = {}
+const FONT = {
+    family: 'monospace',
+}
 
-const SIZES = {}
+const SIZES = {
+    small: 10,
+    medium: 15,
+    large: 20,
+    xlarge: 25,
+    xxlarge: 30,
+}
 
 export { COLORS, FONT, SIZES };
