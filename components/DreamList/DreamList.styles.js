@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { COLORS, FONT } from "../../constants/theme";
 
 const styles = StyleSheet.create({
     container: {
@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: COLORS.white,
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
     },
     refresh: {
         marginLeft: 16,

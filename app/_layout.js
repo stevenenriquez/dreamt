@@ -16,7 +16,7 @@ export default function Layout() {
                     headerTintColor: COLORS.white,
                     headerTitleStyle: {
                         color: COLORS.white,
-                        fontFamily: FONT.fontFamily
+                        fontFamily: FONT.family
                     },
                 }}
             />

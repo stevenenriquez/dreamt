@@ -1,4 +1,4 @@
-import { FlatList, TouchableOpacity, Text } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import styles from './DreamList.styles';
 import DreamPreview from '../DreamPreview/DreamPreview';
 import { useState, useCallback } from 'react';
@@ -31,16 +31,15 @@ export default function DreamList() {
 
     return (
         <>
-            <TouchableOpacity style={styles.refresh} onPress={getDreams}>
-                <Text style={styles.text}>{isLoading ? '...' : 'Refresh'} </Text>
-            </TouchableOpacity>
-            <FlatList
-                data={data}
-                extraData={data}
-                renderItem={({ item }) => (<DreamPreview id={item.id} title={item.title} content={item.content} deleteDream={() => deleteDreamEntry(item.id)} />)}
-                keyExtractor={item => item.id}
-                style={styles.container}
-            />
+            <RefreshControl refreshing={isLoading} onRefresh={getDreams}>
+                <FlatList
+                    data={data}
+                    extraData={data}
+                    renderItem={({ item }) => (<DreamPreview id={item.id} title={item.title} content={item.content} deleteDream={() => deleteDreamEntry(item.id)} />)}
+                    keyExtractor={item => item.id}
+                    style={styles.container}
+                />
+            </RefreshControl>
         </>
     )
 }

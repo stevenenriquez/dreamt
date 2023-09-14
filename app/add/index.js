@@ -26,7 +26,7 @@ export default function AddPage() {
         <>
             <Stack.Screen
                 options={{
-                    headerTitle: 'Add a Dream'
+                    headerTitle: ''
                 }}
             />
             <View style={styles.container}>
@@ -52,7 +52,7 @@ export default function AddPage() {
                     onPress={addDream}
                     disabled={!requiredFieldsArePopulated}
                 >
-                    <Text style={styles.buttonText}>Add</Text>
+                    <Text style={styles.buttonText}>Save</Text>
                 </TouchableOpacity>
             </View>
         </>

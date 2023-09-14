@@ -21,13 +21,22 @@ const COLORS = {
 
     black: '#000000',
     white: '#FFFFFF',
+    darkGray: '#111111',
+    gray: '#222222'
 }
 
 const FONT = {
     family: 'monospace',
+    SIZE: {
+        small: 10,
+        medium: 15,
+        large: 20,
+        xlarge: 25,
+        xxlarge: 30,
+    }
 }
 
-const SIZES = {
+const SPACING = {
     small: 10,
     medium: 15,
     large: 20,
@@ -35,4 +44,4 @@ const SIZES = {
     xxlarge: 30,
 }
 
-export { COLORS, FONT, SIZES };
+export { COLORS, FONT, SPACING };

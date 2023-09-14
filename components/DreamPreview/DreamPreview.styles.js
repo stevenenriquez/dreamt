@@ -1,13 +1,18 @@
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../constants/theme";
+import { COLORS, FONT } from "../../constants/theme";
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: COLORS.darkGray,
         borderRadius: 10,
-        borderColor: COLORS.borderSecondary,
-        borderWidth: 1,
-        padding: 10,
-        margin: 10
+        padding: 20,
+        margin: 6
+    },
+    selectedContainer: {
+        backgroundColor: COLORS.gray,
+        borderRadius: 10,
+        padding: 20,
+        margin: 6
     },
     header: {
         flexDirection: 'row',
@@ -18,18 +23,18 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         color: COLORS.white,
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
         fontWeight: 'bold',
     },
     date: {
-        opacity: 0.8,
+        opacity: 0.5,
         color: COLORS.white,
-        fontFamily: 'monospace',
-        marginBottom: 5
+        fontFamily: FONT.family,
+        marginBottom: 20
     },
     text: {
         color: COLORS.white,
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
     },
     button: {
         marginRight: 10
@@ -41,7 +46,23 @@ const styles = StyleSheet.create({
     link: {
         flex: 1,
         color: COLORS.white,
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
+    },
+    modal: {
+        backgroundColor: COLORS.gray,
+        padding: 20,
+        borderRadius: 10,
+        margin: 10,
+        marginTop: 'auto',
+        marginBottom: 10,
+    },
+    modalOption: {
+        padding: 10,
+        borderRadius: 10,
+        margin: 5,
+        color: COLORS.white,
+        fontFamily: FONT.family,
+        textAlign: 'center'
     }
 });
 

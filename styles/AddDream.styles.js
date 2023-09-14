@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../constants/theme';
+import { COLORS, FONT } from '../constants/theme';
 
 const styles = StyleSheet.create({
     container: {
@@ -8,10 +8,9 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 20,
+        fontSize: 30,
         color: COLORS.white,
-        fontFamily: 'monospace',
-        backgroundColor: '#111',
+        fontFamily: FONT.family,
         padding: 10,
         paddingLeft: 20,
         borderRadius: 10,
@@ -20,8 +19,7 @@ const styles = StyleSheet.create({
     content: {
         fontSize: 15,
         color: COLORS.white,
-        fontFamily: 'monospace',
-        backgroundColor: '#111',
+        fontFamily: FONT.family,
         padding: 10,
         paddingTop: 20,
         paddingLeft: 20,
@@ -32,16 +30,19 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         padding: 10,
         borderRadius: 10,
-        width: 100,
+        width: 75,
         alignSelf: 'center',
-        marginTop: 20
+        marginTop: 'auto',
+        marginBottom: 5,
+        marginRight: 5,
+        marginLeft: 'auto'
     },
     disabledButton: {
         opacity: .4
     },
     buttonText: {
         textAlign: 'center',
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
         fontSize: 15,
         color: COLORS.black
     }
