@@ -1,5 +1,5 @@
 import { useLocalSearchParams, Stack, router } from "expo-router";
-import { View, Text, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, TextInput, ScrollView } from 'react-native';
 import { getDream } from '../../utils/db';
 import styles from '../../styles/Dream.styles';
 import { useEffect, useState } from "react";
@@ -68,6 +68,23 @@ export default function Dream() {
         </>
     );
 
+    const dreamContent = isEditing ? (
+        <TextInput
+            style={styles.content}
+            placeholder="Last Night I.."
+            placeholderTextColor={COLORS.white}
+            value={content}
+            multiline={true}
+            onChangeText={setContent}
+            scrollEnabled={true}
+            editable={isEditing}
+        />
+    ) : (
+        <ScrollView style={styles.content}>
+            <Text style={styles.text}>{content}</Text>
+        </ScrollView>
+    );
+
     return (
         <>
             <Stack.Screen
@@ -88,23 +105,16 @@ export default function Dream() {
                     />
             }
             <View style={styles.container}>
-            <TextInput
-                    style={styles.title}
-                    placeholder="Title"
-                    placeholderTextColor={COLORS.white}
-                    value={title}
-                    onChangeText={setTitle}
-                    editable={isEditing}
-                />
-            <Text style={styles.date}>12/12/12</Text>
-            <TextInput
-                    style={styles.content}
-                    placeholder="Last Night I.."
-                    placeholderTextColor={COLORS.white}
-                    value={content}
-                    onChangeText={setContent}
-                    editable={isEditing}
-            />
+                <TextInput
+                        style={styles.title}
+                        placeholder="Title"
+                        placeholderTextColor={COLORS.white}
+                        value={title}
+                        onChangeText={setTitle}
+                        editable={isEditing}
+                    />
+                <Text style={styles.date}>12/12/12</Text>
+                {dreamContent}
             </View>
         </>
     )

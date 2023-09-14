@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     content: {
         color: COLORS.white,
         fontFamily: 'monospace',
-        marginTop: 50
+        marginTop: 30
     },
     date: {
         opacity: 0.8,
