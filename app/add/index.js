@@ -4,6 +4,7 @@ import { Stack, router } from 'expo-router';
 import styles from '../../styles/AddDream.styles';
 import { COLORS } from '../../constants/theme';
 import { createDream } from '../../utils/db';
+import DreamAttributes from '../../components/DreamAttributes/DreamAttributes';
 
 export default function AddPage() {
     
@@ -31,14 +32,14 @@ export default function AddPage() {
             />
             <View style={styles.container}>
                 <TextInput
-                    style={styles.title}
+                    style={title.length > 0 ? styles.title : [styles.title, styles.textInputPlaceholder]}
                     placeholder="Title"
                     placeholderTextColor={COLORS.white}
                     value={title}
                     onChangeText={setTitle}
                 />
                 <TextInput
-                    style={styles.content}
+                    style={content.length > 0 ? styles.content : [styles.content, styles.textInputPlaceholder]}
                     placeholder="Last Night I.."
                     placeholderTextColor={COLORS.white}
                     multiline={true}
@@ -47,6 +48,7 @@ export default function AddPage() {
                     value={content}
                     onChangeText={setContent}
                 />
+                <DreamAttributes />
                 <TouchableOpacity 
                     style={requiredFieldsArePopulated ? styles.button : [styles.button, styles.disabledButton]}
                     onPress={addDream}

@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 10
     },
+    textInputPlaceholder: {
+        opacity: .7
+    },
     content: {
         fontSize: 15,
         color: COLORS.white,
@@ -24,7 +27,8 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingLeft: 20,
         borderRadius: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        height: 400
     },
     button: {
         backgroundColor: COLORS.white,
