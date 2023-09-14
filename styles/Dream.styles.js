@@ -12,6 +12,11 @@ const styles = StyleSheet.create({
         color: COLORS.white,
         fontFamily: 'monospace'
     },
+    content: {
+        color: COLORS.white,
+        fontFamily: 'monospace',
+        marginTop: 50
+    },
     date: {
         opacity: 0.8,
         color: COLORS.white,
@@ -19,10 +24,15 @@ const styles = StyleSheet.create({
         paddingTop: 10
     },
     text: {
-        marginTop: 10,
         color: COLORS.white,
         fontFamily: 'monospace',
     },
+    editButton: {
+        marginRight: 5,
+    },
+    deleteButton: {
+        marginRight: 25
+    }
 });
 
 export default styles;

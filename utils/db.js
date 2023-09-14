@@ -21,7 +21,10 @@ const executeSql = (sql, params = []) => {
     return new Promise((resolve, reject) => {
         db.transaction(tx => {
             tx.executeSql(sql, params, (txObj, resultSet) => resolve(resultSet),
-            (txObj, error) => reject(error));
+            (txObj, error) => {
+                console.error('Error executing SQL: ' + error);
+                reject(error);
+            });
         });
     });
 }
@@ -40,6 +43,10 @@ export const createDreamTable = () => {
 
 export const createDream = (title, content) => {
     return executeSql('INSERT INTO dreams (title, content) VALUES (?, ?)', [title, content]);
+}
+
+export const updateDream = (id, title, content) => {
+    return executeSql('UPDATE dreams SET title = ?, content = ? WHERE id = ?', [title, content, id]);
 }
 
 export const deleteDream = id => {

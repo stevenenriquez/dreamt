@@ -15,10 +15,10 @@ export default function AddPage() {
 
     const addDream = async () => {
         try {
-            createDream(title, content);
+            await createDream(title, content);
             router.push('/');
         } catch (error) {
-            console.error(error);
+            console.error('Error adding dream: ', error);
         }
     };
 
