@@ -18,8 +18,12 @@ export default function DreamList() {
     const getDreams = async () => {
         setIsLoading(true);
         const dreams = await getAllDreams();
-        if(dreams && dreams.rows && dreams.rows._array && dreams.rows._array.length > 0) {
-            setData(dreams.rows._array);
+        if(dreams && dreams.rows && dreams.rows._array) {
+            if(dreams.rows._array.length > 0) {
+                setData(dreams.rows._array);
+            } else {
+                setData([]);
+            }
         }
         setIsLoading(false);
     };
