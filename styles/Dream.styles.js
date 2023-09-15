@@ -16,19 +16,24 @@ const styles = StyleSheet.create({
         color: COLORS.white,
         fontFamily: 'monospace',
         marginTop: 30,
+        borderRadius: 10,
+    },
+    editingContent: {
+        color: COLORS.white,
+        fontFamily: 'monospace',
+        marginTop: 30,
         maxHeight: '50%',
         borderRadius: 10,
-        
     },
     editingField: {
         borderWidth: 1,
-        borderColor: COLORS.white,
+        borderColor: COLORS.lightGray,
         borderRadius: 10,
         borderStyle: 'dashed',
         padding: 15,
     },
     editingTitle: {
-        borderBottomColor: COLORS.white,
+        borderBottomColor: COLORS.lightGray,
         borderBottomWidth: 1,
         borderStyle: 'dashed',
         paddingBottom: 10,

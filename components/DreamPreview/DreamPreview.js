@@ -64,7 +64,7 @@ export default function DreamPreview(props) {
                     <View style={styles.header}>
                         <Text style={styles.title}>{props.title || 'N/A'}</Text>
                     </View>
-                    <Text style={styles.date}>12/12/12</Text>
+                    <Text style={styles.date}>{new Date(props.date).toLocaleDateString()}</Text>
                     <Text numberOfLines={3} style={styles.text}>{props.content || 'Empty'}</Text>
                 </Pressable>
             </View>

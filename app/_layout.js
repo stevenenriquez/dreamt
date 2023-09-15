@@ -1,6 +1,9 @@
 import { Stack } from 'expo-router';
 import { COLORS, FONT } from '../constants/theme';
 import { APP_NAME } from '../constants/constants';
+import { en, registerTranslation } from 'react-native-paper-dates';
+
+registerTranslation('en', en);
 
 export default function Layout() {
     return (

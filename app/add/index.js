@@ -6,6 +6,7 @@ import { COLORS } from '../../constants/theme';
 import { createDream } from '../../utils/db';
 import DreamAttributes from '../../components/DreamAttributes/DreamAttributes';
 import { DatePickerModal } from 'react-native-paper-dates';
+import { MD3DarkTheme, Modal, PaperProvider, Portal } from 'react-native-paper';
 
 export default function AddPage() {
     
@@ -19,7 +20,7 @@ export default function AddPage() {
 
     const addDream = async () => {
         try {
-            await createDream(title, content);
+            await createDream(title, content, date.toISOString());
             router.push('/');
         } catch (error) {
             console.error('Error adding dream: ', error);
@@ -36,6 +37,19 @@ export default function AddPage() {
         </TouchableOpacity>
     );
 
+    const portalTheme = {
+        ...MD3DarkTheme,
+        colors: {
+          ...MD3DarkTheme.colors,
+          primary: COLORS.white,
+          secondary: COLORS.white,
+          background: COLORS.backgroundPrimary,
+          backgroundVariant: COLORS.black,
+          surface: COLORS.black,
+          surfaceVariant: COLORS.black,
+        },
+      };
+
     return (
         <>
             <Stack.Screen
@@ -47,6 +61,28 @@ export default function AddPage() {
                 }}
             />
             <SafeAreaView style={styles.container}>
+                <PaperProvider theme={portalTheme}>
+                    <Portal>
+                        <Modal visible={datePickerVisible}>
+                            <DatePickerModal
+                                locale="en"
+                                mode="single"
+                                visible={datePickerVisible}
+                                onDismiss={() => setDatePickerVisible(false)}
+                                date={date}
+                                onConfirm={(date) => {
+                                    setDate(new Date(date.date));
+                                    setDatePickerVisible(false);
+                                }}
+                                saveLabel="Save"
+                                label="Select date"
+                                animationType="slide"
+                                startYear={1900}
+                                endYear={new Date().getFullYear()}
+                            />
+                        </Modal>
+                    </Portal>
+                </PaperProvider>
                 <ScrollView>
                     <TextInput
                         style={title.length > 0 ? styles.title : [styles.title, styles.textInputPlaceholder]}
@@ -60,19 +96,6 @@ export default function AddPage() {
                     <TouchableOpacity onPress={() => setDatePickerVisible(true)}>
                         <Text style={styles.date}>{date.toLocaleDateString()}</Text>
                     </TouchableOpacity>
-                    <DatePickerModal
-                        locale="en"
-                        mode="single"
-                        visible={datePickerVisible}
-                        onDismiss={() => setDatePickerVisible(false)}
-                        date={date}
-                        onConfirm={(date) => {
-                            setDate(new Date(date.date));
-                        }}
-                        saveLabel="Save"
-                        label="Select date"
-                        animationType="slide"
-                    />
                     <TextInput
                         style={content.length > 0 ? styles.content : [styles.content, styles.textInputPlaceholder]}
                         placeholder="Last Night I.."

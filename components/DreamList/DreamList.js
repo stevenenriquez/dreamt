@@ -39,7 +39,7 @@ export default function DreamList() {
                 <FlatList
                     data={data}
                     extraData={data}
-                    renderItem={({ item }) => (<DreamPreview id={item.id} title={item.title} content={item.content} deleteDream={() => deleteDreamEntry(item.id)} />)}
+                    renderItem={({ item }) => (<DreamPreview id={item.id} date={item.date} title={item.title} content={item.content} deleteDream={() => deleteDreamEntry(item.id)} />)}
                     keyExtractor={item => item.id}
                     style={styles.container}
                 />

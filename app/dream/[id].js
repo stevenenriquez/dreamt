@@ -1,5 +1,5 @@
 import { useLocalSearchParams, Stack, router } from "expo-router";
-import { View, Text, TouchableOpacity, ActivityIndicator, TextInput, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, TextInput, ScrollView, SafeAreaView } from 'react-native';
 import { getDream } from '../../utils/db';
 import styles from '../../styles/Dream.styles';
 import { useEffect, useState } from "react";
@@ -15,12 +15,14 @@ export default function Dream() {
     const [editingTitle, setEditingTitle] = useState('');
     const [content, setContent] = useState('');
     const [editingContent, setEditingContent] = useState('');
+    const [date, setDate] = useState('');
+    const [editingDate, setEditingDate] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [confirmationModalVisible, setConfirmationModalVisible] = useState(false);
 
     const requiredFieldsArePopulated = (
-        title && title.length > 0 && content && content.length > 0
+        title && title.length > 0 && content && content.length > 0 && date.length > 0
     );
 
     const getDreamEntry = async () => {
@@ -29,8 +31,10 @@ export default function Dream() {
         if(dream && dream.rows && dream.rows._array && dream.rows._array.length > 0) {
             setTitle(dream.rows._array[0].title || 'Dream Not Found');
             setContent(dream.rows._array[0].content || '');
+            setDate(dream.rows._array[0].date || '');
             setEditingTitle(dream.rows._array[0].title || '');
             setEditingContent(dream.rows._array[0].content || '');
+            setEditingDate(dream.rows._array[0].date || '');
         }
         setIsLoading(false);
     }
@@ -43,12 +47,16 @@ export default function Dream() {
             if(editingContent.length === 0) {
                 setEditingContent(content);
             }
-            await updateDream(id, editingTitle, editingContent);
+            if(!editingDate) {
+                setEditingDate(date);
+            }
+            await updateDream(id, editingTitle, editingContent, editingDate);
             await getDreamEntry();
             setIsEditing(false);
-        } else if(editingTitle.length > 0 && editingContent.length > 0) {
+        } else if(editingTitle.length > 0 && editingContent.length > 0 && editingDate.length > 0) {
             setEditingTitle(title);
             setEditingContent(content);
+            setEditingDate(date);
             setIsEditing(true);
         }
     }
@@ -57,6 +65,7 @@ export default function Dream() {
         setIsEditing(false);
         setEditingTitle(title);
         setEditingContent(content);
+        setEditingDate(date);
     }
 
     const handleDelete = async () => {
@@ -106,7 +115,7 @@ export default function Dream() {
 
     const dreamContent = isEditing ? (
         <TextInput
-            style={[styles.content, styles.editingField]}
+            style={[styles.editingContent, styles.editingField]}
             placeholder="Last Night I.."
             placeholderTextColor={COLORS.white}
             value={editingContent}
@@ -140,16 +149,16 @@ export default function Dream() {
                         modalActionText="Delete"
                     />
             }
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 {dreamTitle}
-                <Text style={styles.date}>12/12/12</Text>
+                <Text style={styles.date}>{new Date(date).toLocaleDateString()}</Text>
                 {dreamContent}
                 {isEditing && (
                     <View style={styles.container}>
                         <DreamAttributes />
                     </View>
                 )}
-            </View>
+            </SafeAreaView>
         </>
     )
 }

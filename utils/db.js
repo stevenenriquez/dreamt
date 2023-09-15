@@ -41,12 +41,12 @@ export const createDreamTable = () => {
     return executeSql('CREATE TABLE IF NOT EXISTS dreams (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, date TEXT);');
 }
 
-export const createDream = (title, content) => {
-    return executeSql('INSERT INTO dreams (title, content) VALUES (?, ?)', [title, content]);
+export const createDream = (title, content, date) => {
+    return executeSql('INSERT INTO dreams (title, content, date) VALUES (?, ?, ?)', [title, content, date]);
 }
 
-export const updateDream = (id, title, content) => {
-    return executeSql('UPDATE dreams SET title = ?, content = ? WHERE id = ?', [title, content, id]);
+export const updateDream = (id, title, content, date) => {
+    return executeSql('UPDATE dreams SET title = ?, content = ?, date = ? WHERE id = ?', [title, content, date, id]);
 }
 
 export const deleteDream = id => {

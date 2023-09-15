@@ -22,7 +22,8 @@ const COLORS = {
     black: '#000000',
     white: '#FFFFFF',
     darkGray: '#111111',
-    gray: '#222222'
+    gray: '#222222',
+    lightGray: '#666666',
 }
 
 const FONT = {
