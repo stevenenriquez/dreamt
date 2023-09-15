@@ -8,14 +8,30 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 20,
+        fontSize: 18,
         color: COLORS.white,
         fontFamily: 'monospace'
     },
     content: {
         color: COLORS.white,
         fontFamily: 'monospace',
-        marginTop: 30
+        marginTop: 30,
+        maxHeight: '50%',
+        borderRadius: 10,
+        
+    },
+    editingField: {
+        borderWidth: 1,
+        borderColor: COLORS.white,
+        borderRadius: 10,
+        borderStyle: 'dashed',
+        padding: 15,
+    },
+    editingTitle: {
+        borderBottomColor: COLORS.white,
+        borderBottomWidth: 1,
+        borderStyle: 'dashed',
+        paddingBottom: 10,
     },
     date: {
         opacity: 0.8,
@@ -32,6 +48,9 @@ const styles = StyleSheet.create({
     },
     deleteButton: {
         marginRight: 25
+    },
+    disabledButton: {
+        opacity: .4
     }
 });
 

@@ -16,6 +16,16 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 10
     },
+    date: {
+        color: COLORS.white,
+        fontFamily: FONT.family,
+        marginBottom: 10,
+        marginLeft: 20
+    },
+    text: {
+        color: COLORS.white,
+        fontFamily: FONT.family,
+    },
     textInputPlaceholder: {
         opacity: .7
     },
@@ -31,24 +41,18 @@ const styles = StyleSheet.create({
         height: 400
     },
     button: {
-        backgroundColor: COLORS.white,
-        padding: 10,
-        borderRadius: 10,
-        width: 75,
-        alignSelf: 'center',
-        marginTop: 'auto',
-        marginBottom: 5,
-        marginRight: 5,
-        marginLeft: 'auto'
+        marginRight: 5
+    },
+    headerButton: {
+        marginRight: 10
     },
     disabledButton: {
-        opacity: .4
+        opacity: .3
     },
     buttonText: {
-        textAlign: 'center',
         fontFamily: FONT.family,
         fontSize: 15,
-        color: COLORS.black
+        color: COLORS.white
     }
 });
 

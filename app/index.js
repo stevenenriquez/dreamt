@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { Link, Stack } from 'expo-router';
 import DreamList from '../components/DreamList/DreamList';
 import styles from '../styles/Home.styles';
@@ -11,10 +11,10 @@ export default function Home() {
                     headerTitle: 'My Dreams'
                 }}
             />
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <DreamList />
                 <Link href="/add" style={styles.addButton}>+</Link>
-            </View>
+            </SafeAreaView>
         </>
     );
 }

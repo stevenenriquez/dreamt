@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
         fontFamily: FONT.family,
     },
     modal: {
-        backgroundColor: COLORS.gray,
+        backgroundColor: COLORS.black,
         padding: 20,
         borderRadius: 10,
         margin: 10,
         marginTop: 'auto',
-        marginBottom: 10,
+        marginBottom: 0,
     },
     modalOption: {
         padding: 10,

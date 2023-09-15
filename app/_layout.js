@@ -18,6 +18,7 @@ export default function Layout() {
                         color: COLORS.white,
                         fontFamily: FONT.family
                     },
+                    animation: 'fade',
                 }}
             />
         </>

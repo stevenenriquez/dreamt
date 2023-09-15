@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 import { COLORS } from "../../constants/theme";
 import { updateDream, deleteDream } from "../../utils/db";
 import ConfirmationModal from "../../components/ConfirmationModal/ConfirmationModal";
+import DreamAttributes from "../../components/DreamAttributes/DreamAttributes";
 
 export default function Dream() {
     const { id } = useLocalSearchParams();
 
     const [title, setTitle] = useState('');
+    const [editingTitle, setEditingTitle] = useState('');
     const [content, setContent] = useState('');
+    const [editingContent, setEditingContent] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [confirmationModalVisible, setConfirmationModalVisible] = useState(false);
@@ -26,15 +29,34 @@ export default function Dream() {
         if(dream && dream.rows && dream.rows._array && dream.rows._array.length > 0) {
             setTitle(dream.rows._array[0].title || 'Dream Not Found');
             setContent(dream.rows._array[0].content || '');
+            setEditingTitle(dream.rows._array[0].title || '');
+            setEditingContent(dream.rows._array[0].content || '');
         }
         setIsLoading(false);
     }
 
     const handleEdit = async () => {
         if(isEditing) {
-            await updateDream(id, title, content);
+            if(editingTitle.length === 0) {
+                setEditingTitle(title);
+            }
+            if(editingContent.length === 0) {
+                setEditingContent(content);
+            }
+            await updateDream(id, editingTitle, editingContent);
+            await getDreamEntry();
+            setIsEditing(false);
+        } else if(editingTitle.length > 0 && editingContent.length > 0) {
+            setEditingTitle(title);
+            setEditingContent(content);
+            setIsEditing(true);
         }
-        setIsEditing(!isEditing);
+    }
+
+    const handleCancel = () => {
+        setIsEditing(false);
+        setEditingTitle(title);
+        setEditingContent(content);
     }
 
     const handleDelete = async () => {
@@ -59,29 +81,43 @@ export default function Dream() {
 
     const headerRightButtons = (
         <>
-            <TouchableOpacity style={styles.deleteButton} onPress={() => setConfirmationModalVisible(true)}>
-                <Text style={styles.text}>Delete</Text>
+            <TouchableOpacity style={styles.deleteButton} onPress={isEditing ? handleCancel : () => setConfirmationModalVisible(true)}>
+                <Text style={styles.text}>{isEditing ? 'Cancel' : 'Delete'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-                <Text style={styles.text}>{isEditing ? 'Done' : 'Edit'}</Text>
+            <TouchableOpacity style={requiredFieldsArePopulated ? styles.editButton : [styles.editButton, styles.disabledButton]} onPress={handleEdit}>
+                <Text style={styles.text}>{isEditing ? 'Save' : 'Edit'}</Text>
             </TouchableOpacity>
         </>
     );
 
+    const dreamTitle = isEditing ? (
+        <TextInput
+            style={[styles.title, styles.editingTitle]}
+            placeholder="Title"
+            placeholderTextColor={COLORS.white}
+            value={editingTitle}
+            onChangeText={setEditingTitle}
+            editable={isEditing}
+            multiline={true}
+        />
+    ) : (
+        <Text selectable style={styles.title}>{title}</Text>
+    );
+
     const dreamContent = isEditing ? (
         <TextInput
-            style={styles.content}
+            style={[styles.content, styles.editingField]}
             placeholder="Last Night I.."
             placeholderTextColor={COLORS.white}
-            value={content}
+            value={editingContent}
             multiline={true}
-            onChangeText={setContent}
+            onChangeText={setEditingContent}
             scrollEnabled={true}
             editable={isEditing}
         />
     ) : (
         <ScrollView style={styles.content}>
-            <Text style={styles.text}>{content}</Text>
+            <Text selectable style={styles.text}>{content}</Text>
         </ScrollView>
     );
 
@@ -92,7 +128,7 @@ export default function Dream() {
                     headerTitle: isEditing ? 'Editing' : '',
                     headerRight: () => (
                         requiredFieldsArePopulated && headerRightButtons
-                    )
+                    ),
                 }}
             />
             {confirmationModalVisible 
@@ -105,16 +141,14 @@ export default function Dream() {
                     />
             }
             <View style={styles.container}>
-                <TextInput
-                        style={styles.title}
-                        placeholder="Title"
-                        placeholderTextColor={COLORS.white}
-                        value={title}
-                        onChangeText={setTitle}
-                        editable={isEditing}
-                    />
+                {dreamTitle}
                 <Text style={styles.date}>12/12/12</Text>
                 {dreamContent}
+                {isEditing && (
+                    <View style={styles.container}>
+                        <DreamAttributes />
+                    </View>
+                )}
             </View>
         </>
     )

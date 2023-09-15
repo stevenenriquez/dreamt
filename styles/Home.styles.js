@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         color: COLORS.black,
         fontSize: 30,
         position: 'absolute',
-        bottom: 20,
+        bottom: 50,
         right: 20,
         padding: 10,
         width: 50,
