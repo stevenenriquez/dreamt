@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     },
     date: {
         color: COLORS.white,
+        opacity: .7,
         fontFamily: FONT.family,
         marginBottom: 10,
         marginLeft: 20
