@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.black,
-        padding: 20,
+        padding: 20
     },
     title: {
         fontSize: 30,

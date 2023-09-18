@@ -41,7 +41,7 @@ export default function AddPage() {
         ...MD3DarkTheme,
         colors: {
           ...MD3DarkTheme.colors,
-          primary: COLORS.white,
+          primary: '#AAA',
           secondary: COLORS.white,
           background: COLORS.backgroundPrimary,
           backgroundVariant: COLORS.black,
@@ -63,28 +63,25 @@ export default function AddPage() {
             <SafeAreaView style={styles.container}>
                 <PaperProvider theme={portalTheme}>
                     <Portal>
-                        <Modal visible={datePickerVisible}>
-                            <DatePickerModal
-                                locale="en"
-                                mode="single"
-                                visible={datePickerVisible}
-                                onDismiss={() => setDatePickerVisible(false)}
-                                date={date}
-                                onConfirm={(date) => {
-                                    setDate(new Date(date.date));
-                                    setDatePickerVisible(false);
-                                }}
-                                saveLabel="Save"
-                                label="Select date"
-                                animationType="slide"
-                                startYear={1900}
-                                endYear={new Date().getFullYear()}
-                            />
-                        </Modal>
+                        <DatePickerModal
+                            locale="en"
+                            mode="single"
+                            visible={datePickerVisible}
+                            onDismiss={() => setDatePickerVisible(false)}
+                            date={date}
+                            onConfirm={(date) => {
+                                setDate(new Date(date.date));
+                                setDatePickerVisible(false);
+                            }}
+                            saveLabel="Save"
+                            label="Select date"
+                            animationType="fade"
+                            startYear={1900}
+                            endYear={new Date().getFullYear()}
+                        />
                     </Portal>
                 </PaperProvider>
-                <ScrollView>
-                    <TextInput
+                <TextInput
                         style={title.length > 0 ? styles.title : [styles.title, styles.textInputPlaceholder]}
                         placeholder="Title"
                         placeholderTextColor={COLORS.white}
@@ -93,6 +90,7 @@ export default function AddPage() {
                         multiline
                         maxLength={50}
                     />
+                <ScrollView>
                     <TouchableOpacity onPress={() => setDatePickerVisible(true)}>
                         <Text style={styles.date}>{date.toLocaleDateString()}</Text>
                     </TouchableOpacity>
