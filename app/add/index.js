@@ -71,6 +71,12 @@ export default function AddPage() {
         }
     }
 
+    const noImageContainer = (
+        <TouchableOpacity onPress={pickImage} activeOpacity={1} style={styles.noImagesContainer}>
+            <Text style={styles.noImagesText}>+</Text>
+        </TouchableOpacity>
+    );
+
     const uploadedImages = (
         images && images.length > 0 ? (
             <ScrollView horizontal={true}>
@@ -84,11 +90,9 @@ export default function AddPage() {
                         <Image source={{ uri: imgUri }} style={styles.selectedImage} />
                     </View>
                 ))}
-                {images.length < 3 && (
-                    <TouchableOpacity onPress={pickImage} activeOpacity={1} style={styles.noImagesContainer}/>
-                )}
+                {images.length < 3 && noImageContainer}
             </ScrollView>
-        ) : <TouchableOpacity onPress={pickImage} activeOpacity={1} style={styles.noImagesContainer}/>
+        ) : noImageContainer
     );
 
     const headerRightButton = (

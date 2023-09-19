@@ -89,6 +89,13 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.black,
         borderColor: COLORS.gray,
         borderWidth: 2,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    noImagesText: {
+        color: COLORS.lightGray,
+        fontWeight: 'bold',
+        fontSize: 40,
     },
     noVideoContainer: {
         height: 200,
