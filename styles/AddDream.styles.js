@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 30,
         height: 400,
-        backgroundColor: COLORS.nearBlack,
-        borderWidth: 1,
+        backgroundColor: COLORS.black,
+        borderWidth: 2,
         borderColor: COLORS.gray
     },
     notes: {
@@ -55,10 +55,10 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 30,
         height: 200,
-        backgroundColor: COLORS.nearBlack,
+        backgroundColor: COLORS.black,
         marginBottom: 20,
         paddingBottom: 50,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: COLORS.gray
     },
     button: {

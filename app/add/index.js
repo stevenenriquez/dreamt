@@ -174,10 +174,11 @@ export default function AddPage() {
                         <Text style={styles.sectionTitle}>Images</Text>
                         {uploadedImages}
                     </View>
-                    <View style={styles.section}>
+                    {/* Add ability to create dream video after saving the dream */}
+                    {/* <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Dream Video</Text>
                         <TouchableOpacity onPress={pickImage} activeOpacity={1} style={styles.noVideoContainer}/>
-                    </View>
+                    </View> */}
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Tags</Text>
                         <View style={styles.tagList}>
