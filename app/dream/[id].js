@@ -28,7 +28,7 @@ export default function Dream() {
         setIsLoading(true);
         const dream = await getDream(id);
         if(dream && dream.rows && dream.rows._array && dream.rows._array.length > 0) {
-            setTitle(dream.rows._array[0].title || 'Dream Not Found');
+            setTitle(dream.rows._array[0].title || '');
             setContent(dream.rows._array[0].content || '');
             setDate(dream.rows._array[0].date || '');
             setEditingTitle(dream.rows._array[0].title || '');
@@ -109,7 +109,7 @@ export default function Dream() {
             multiline={true}
         />
     ) : (
-        <Text selectable style={styles.title}>{title}</Text>
+        <Text selectable style={styles.title}>{title && title.length > 0 ? title : new Date(date).toLocaleDateString()}</Text>
     );
 
     const dreamContent = isEditing ? (
@@ -150,7 +150,7 @@ export default function Dream() {
             }
             <SafeAreaView style={styles.container}>
                 {dreamTitle}
-                <Text style={styles.date}>{new Date(date).toLocaleDateString()}</Text>
+                {title && title.length > 0 ? <Text style={styles.date}>{new Date(date).toLocaleDateString()}</Text> : null}
                 {dreamContent}
             </SafeAreaView>
         </>

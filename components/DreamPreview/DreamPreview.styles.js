@@ -3,8 +3,10 @@ import { COLORS, FONT } from "../../constants/theme";
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: COLORS.darkGray,
-        borderRadius: 10,
+        backgroundColor: COLORS.nearBlack,
+        borderWidth: 1,
+        borderColor: COLORS.gray,
+        borderRadius: 20,
         padding: 20,
         margin: 6
     },

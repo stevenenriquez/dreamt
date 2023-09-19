@@ -62,9 +62,9 @@ export default function DreamPreview(props) {
                 {modalVisible && dreamOptionsModal}
                 <Pressable onPress={() => router.push(`/dream/${props.id}`)} onLongPress={longPressDream}>
                     <View style={styles.header}>
-                        <Text style={styles.title}>{props.title || 'N/A'}</Text>
+                        <Text style={styles.title}>{props.title || new Date(props.date).toLocaleDateString()}</Text>
                     </View>
-                    <Text style={styles.date}>{new Date(props.date).toLocaleDateString()}</Text>
+                    {props.title && <Text style={styles.date}>{new Date(props.date).toLocaleDateString()}</Text>}
                     <Text numberOfLines={3} style={styles.text}>{props.content || 'Empty'}</Text>
                 </Pressable>
             </View>
