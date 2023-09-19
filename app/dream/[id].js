@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { COLORS } from "../../constants/theme";
 import { updateDream, deleteDream } from "../../utils/db";
 import ConfirmationModal from "../../components/ConfirmationModal/ConfirmationModal";
-import DreamAttributes from "../../components/DreamAttributes/DreamAttributes";
 
 export default function Dream() {
     const { id } = useLocalSearchParams();
@@ -153,11 +152,6 @@ export default function Dream() {
                 {dreamTitle}
                 <Text style={styles.date}>{new Date(date).toLocaleDateString()}</Text>
                 {dreamContent}
-                {isEditing && (
-                    <View style={styles.container}>
-                        <DreamAttributes />
-                    </View>
-                )}
             </SafeAreaView>
         </>
     )
