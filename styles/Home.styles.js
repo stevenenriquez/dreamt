@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         backgroundColor: COLORS.white,
         borderRadius: 30
+    },
+    text: {
+        color: COLORS.white,
+        fontSize: 20
     }
 });
 

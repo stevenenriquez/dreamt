@@ -38,11 +38,11 @@ export const getAllDreams = () => {
 }
 
 export const createDreamTable = () => {
-    return executeSql('CREATE TABLE IF NOT EXISTS dreams (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, date TEXT);');
+    return executeSql(`CREATE TABLE IF NOT EXISTS dreams (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, date TEXT,imagePaths TEXT, tags TEXT, clarity INTEGER, notes TEXT);CREATE INDEX IF NOT EXISTS idx_date ON dreams(date);CREATE INDEX IF NOT EXISTS idx_title ON dreams(title);`);
 }
 
-export const createDream = (title, content, date) => {
-    return executeSql('INSERT INTO dreams (title, content, date) VALUES (?, ?, ?)', [title, content, date]);
+export const createDream = (title, content, date, imagePaths, tags, clarity, notes) => {
+    return executeSql('INSERT INTO dreams (title, content, date, imagePaths, tags, clarity, notes) VALUES (?, ?, ?, ?, ?, ?, ?)', [title, content, date, imagePaths, tags, clarity, notes]);
 }
 
 export const updateDream = (id, title, content, date) => {
@@ -51,4 +51,8 @@ export const updateDream = (id, title, content, date) => {
 
 export const deleteDream = id => {
     return executeSql('DELETE FROM dreams WHERE id = ?', [id]);
+}
+
+export const dropDreamTable = () => {
+    return executeSql('DROP TABLE IF EXISTS dreams');
 }

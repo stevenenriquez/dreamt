@@ -16,7 +16,12 @@ const styles = StyleSheet.create({
         color: COLORS.white,
         fontFamily: 'monospace',
         marginTop: 30,
+        marginBottom: 15,
         borderRadius: 10,
+        backgroundColor: COLORS.nearBlack,
+        borderWidth: 1,
+        borderColor: COLORS.gray,
+        padding: 10
     },
     editingContent: {
         color: COLORS.white,
@@ -56,6 +61,15 @@ const styles = StyleSheet.create({
     },
     disabledButton: {
         opacity: .4
+    },
+    images: {
+        marginTop: 10
+    },
+    image: {
+        width: 200,
+        height: 150,
+        borderRadius: 10,
+        marginRight: 10
     }
 });
 

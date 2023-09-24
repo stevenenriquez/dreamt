@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 30,
         height: 400,
-        backgroundColor: COLORS.black,
+        backgroundColor: COLORS.nearBlack,
         borderWidth: 2,
         borderColor: COLORS.gray
     },
@@ -55,14 +55,14 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 30,
         height: 200,
-        backgroundColor: COLORS.black,
+        backgroundColor: COLORS.nearBlack,
         marginBottom: 20,
         paddingBottom: 50,
         borderWidth: 2,
         borderColor: COLORS.gray
     },
     button: {
-        marginRight: 5
+        marginRight: 5,
     },
     headerButton: {
         marginRight: 10
@@ -76,26 +76,36 @@ const styles = StyleSheet.create({
         color: COLORS.white
     },
     selectedImage: {
-        width: 200,
-        height: 200,
+        width: 150,
+        height: 150,
         borderRadius: 10,
-        marginRight: 10
+        margin: 5,
+    },
+    imageSelectionButtons: {
+        flexDirection: 'row',
+    },
+    imageSelectButton: {
+        padding: 7,
+        width: '90%',
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     noImagesContainer: {
-        height: 200,
-        width: 200,
+        height: 150,
+        width: 150,
         borderRadius: 10,
         borderStyle: 'dashed',
-        backgroundColor: COLORS.black,
+        backgroundColor: COLORS.nearBlack,
         borderColor: COLORS.gray,
         borderWidth: 2,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
-    noImagesText: {
-        color: COLORS.lightGray,
-        fontWeight: 'bold',
-        fontSize: 40,
+    imageSelectText: {
+        color: COLORS.white,
+        fontFamily: FONT.family,
+        fontSize: 15
     },
     noVideoContainer: {
         height: 200,
@@ -130,6 +140,9 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 150,
         borderRadius: 20,
+    },
+    claritySlider: {
+        margin: 5
     }
 });
 

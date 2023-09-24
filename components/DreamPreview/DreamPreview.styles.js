@@ -8,7 +8,8 @@ const styles = StyleSheet.create({
         borderColor: COLORS.gray,
         borderRadius: 20,
         padding: 20,
-        margin: 6
+        margin: 6,
+        marginBottom: 15
     },
     selectedContainer: {
         backgroundColor: COLORS.gray,
@@ -65,6 +66,15 @@ const styles = StyleSheet.create({
         color: COLORS.white,
         fontFamily: FONT.family,
         textAlign: 'center'
+    },
+    images: {
+        marginTop: 10
+    },
+    image: {
+        width: 200,
+        height: 150,
+        borderRadius: 10,
+        marginRight: 10
     }
 });
 

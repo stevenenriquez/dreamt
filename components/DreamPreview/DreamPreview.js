@@ -1,4 +1,4 @@
-import { Pressable, Text, View, Modal, TouchableOpacity } from 'react-native';
+import { Pressable, Text, View, Modal, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import styles from './DreamPreview.styles';
@@ -67,6 +67,11 @@ export default function DreamPreview(props) {
                     {props.title && <Text style={styles.date}>{new Date(props.date).toLocaleDateString()}</Text>}
                     <Text numberOfLines={3} style={styles.text}>{props.content || 'Empty'}</Text>
                 </Pressable>
+                <ScrollView horizontal={true} style={styles.images}>
+                    {props.imagePaths && JSON.parse(props.imagePaths).map((imagePath, index) => (
+                        <Image key={index} source={{ uri: imagePath }} style={styles.image} />
+                    ))}
+                </ScrollView>
             </View>
         </>
     )

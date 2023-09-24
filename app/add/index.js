@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, View, Image } from 'react-native';
+import { Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, View, Image, Pressable } from 'react-native';
 import { Stack, router } from 'expo-router';
 import styles from '../../styles/AddDream.styles';
 import { COLORS } from '../../constants/theme';
 import { createDream } from '../../utils/db';
-import TagList from '../../components/TagList/TagList';
 import { DatePickerModal } from 'react-native-paper-dates';
 import { MD3DarkTheme, PaperProvider, Portal } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import DreamCategories from '../../components/DreamCategories/DreamCategories';
+import Slider from '@react-native-community/slider';
+import * as FileSystem from 'expo-file-system';
 
 export default function AddPage() {
     
@@ -20,14 +23,40 @@ export default function AddPage() {
     const [datePickerVisible, setDatePickerVisible] = useState(false);
     const [content, setContent] = useState('');
     const [images, setImages] = useState([]);
+    
+    // Just for temporary testing
+    const getRandomInt = (max) => {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
 
     const requiredFieldsArePopulated = (
         content && content.length > 0
     );
 
+    const storeImages = async () => {
+        try {
+            const storedImages = await Promise.all(images.map(async (imgUri, index) => {
+                const imgName = `dream-${getRandomInt(10000)}-image-${index}.jpg`;
+                const imgInfo = await FileSystem.getInfoAsync(imgUri);
+                if(imgInfo.exists && imgInfo.isDirectory === false) {
+                    await FileSystem.copyAsync({
+                        from: imgUri,
+                        to: `${FileSystem.documentDirectory}${imgName}`,
+                    });
+                }
+                return `${FileSystem.documentDirectory}${imgName}`;
+            }));
+            return storedImages;
+        } catch (error) {
+            console.error('Error storing images: ', error);
+        }
+    }
+
     const addDream = async () => {
         try {
-            await createDream(title, content, date.toISOString());
+            const storedImages = await storeImages();
+            // TODO: route to dream page after adding dream
+            await createDream(title, content, date.toISOString(), JSON.stringify(storedImages), JSON.stringify(tags), clarity, notes);
             router.push('/');
         } catch (error) {
             console.error('Error adding dream: ', error);
@@ -35,13 +64,12 @@ export default function AddPage() {
     };
 
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             aspect: [4, 3],
             quality: 1,
             allowsMultipleSelection: true,
-            selectionLimit: 3,
+            selectionLimit: images.length < 3 ? 3 - images.length : 0,
         });
         
         if (!result.canceled) {
@@ -57,31 +85,27 @@ export default function AddPage() {
         }
     };
 
-    const handleTagSearchTextChange = text => {
-        setTagSearchText(text);
-        if(text.endsWith(' ')) {
-            if(text.trim().length > 0 && !tags.includes(text.trim()) && !text.trim().includes(' ')) {
-                setTags(prevTags => {
-                    let newTags = [...prevTags];
-                    newTags.push(text.trim());
-                    return newTags;
-                });
-            }
-            setTagSearchText('');
-        }
+    const imageSelectionButton = (icon, text) => {
+        return (
+            <View style={styles.imageSelectButton}>
+                <Icon.Button onPress={pickImage} name={icon} size={20} color={COLORS.white} backgroundColor={COLORS.nearBlack} borderRadius={10} iconStyle={{marginRight: 0}}/>
+                <Text style={styles.text}>{text}</Text>
+            </View>
+        );
     }
 
     const noImageContainer = (
-        <TouchableOpacity onPress={pickImage} activeOpacity={1} style={styles.noImagesContainer}>
-            <Text style={styles.noImagesText}>+</Text>
-        </TouchableOpacity>
+        <View style={styles.noImagesContainer}>
+            {imageSelectionButton('image', 'Upload')}
+            {imageSelectionButton('rocket', 'Generate')}
+        </View>
     );
 
     const uploadedImages = (
         images && images.length > 0 ? (
-            <ScrollView horizontal={true}>
-                {images.map(imgUri => (
-                    <View style={styles.selectedImageContainer}>
+            <ScrollView horizontal={true} nestedScrollEnabled={true}>
+                {images.map((imgUri, index) => (
+                    <View key={`uploaded-img-${index}`}>
                         <TouchableOpacity onPress={()=> {
                             setImages(images.filter(img => img !== imgUri));
                         }} style={styles.deleteImageButton}>
@@ -92,17 +116,20 @@ export default function AddPage() {
                 ))}
                 {images.length < 3 && noImageContainer}
             </ScrollView>
-        ) : noImageContainer
+        ) : (
+            <View>
+                {noImageContainer}
+            </View>
+        )
     );
 
     const headerRightButton = (
-        <TouchableOpacity
+        <Pressable
             style={requiredFieldsArePopulated ? styles.button : [styles.button, styles.disabledButton]}
-            onPress={addDream}
             disabled={!requiredFieldsArePopulated}
         >
-            <Text style={styles.text}>Save</Text>
-        </TouchableOpacity>
+            <Icon.Button onPress={addDream} name="save" size={20} color={COLORS.white} backgroundColor={COLORS.black} borderRadius={10} iconStyle={{marginRight: 0}}/>
+        </Pressable>
     );
 
     const portalTheme = {
@@ -149,7 +176,7 @@ export default function AddPage() {
                         />
                     </Portal>
                 </PaperProvider>
-                <ScrollView>
+                <ScrollView nestedScrollEnabled={true}>
                     <TextInput
                         style={styles.title}
                         placeholder="Untitled"
@@ -185,26 +212,21 @@ export default function AddPage() {
                     </View> */}
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Tags</Text>
-                        <View style={styles.tagList}>
-                            <TagList tags={tags} setTags={setTags}/>
-                        </View>
-                        <TextInput
-                            style={styles.text}
-                            placeholder="Enter tags separated by spaces"
-                            placeholderTextColor={COLORS.lightGray}
-                            value={tagSearchText}
-                            onChangeText={handleTagSearchTextChange}
-                        />
+                        <DreamCategories tags={tags} setTags={setTags}/>
                     </View>
                     <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Clarity</Text>
-                        <Image source={require('../../assets/clarity.png')} style={styles.clarityImage} blurRadius={parseInt(clarity) || 1} />
-                        <TextInput 
-                            style={styles.text} 
-                            placeholder="Soon to be a slider" 
-                            placeholderTextColor={COLORS.lightGray}
-                            value={clarity}
-                            onChangeText={setClarity}
+                        <Image source={require('../../assets/clarity.png')} style={styles.clarityImage} blurRadius={clarity || 1} />
+                        <Slider
+                            style={styles.claritySlider}
+                            minimumValue = {1}
+                            maximumValue = {10}
+                            minimumTrackTintColor = {COLORS.white}
+                            maximumTrackTintColor = {COLORS.white}
+                            thumbTintColor = {COLORS.white}
+                            step={1}
+                            value = {clarity}
+                            onValueChange = {setClarity}
                         />
                     </View>
                     <View style={styles.section}>

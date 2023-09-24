@@ -1,11 +1,12 @@
 import { useLocalSearchParams, Stack, router } from "expo-router";
-import { View, Text, TouchableOpacity, ActivityIndicator, TextInput, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, ActivityIndicator, TextInput, ScrollView, SafeAreaView, Pressable, Image } from 'react-native';
 import { getDream } from '../../utils/db';
 import styles from '../../styles/Dream.styles';
 import { useEffect, useState } from "react";
 import { COLORS } from "../../constants/theme";
 import { updateDream, deleteDream } from "../../utils/db";
 import ConfirmationModal from "../../components/ConfirmationModal/ConfirmationModal";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Dream() {
     const { id } = useLocalSearchParams();
@@ -16,12 +17,13 @@ export default function Dream() {
     const [editingContent, setEditingContent] = useState('');
     const [date, setDate] = useState('');
     const [editingDate, setEditingDate] = useState('');
+    const [imagePaths, setImagePaths] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [confirmationModalVisible, setConfirmationModalVisible] = useState(false);
 
     const requiredFieldsArePopulated = (
-        title && title.length > 0 && content && content.length > 0 && date.length > 0
+        content && content.length > 0 && date.length > 0
     );
 
     const getDreamEntry = async () => {
@@ -31,6 +33,7 @@ export default function Dream() {
             setTitle(dream.rows._array[0].title || '');
             setContent(dream.rows._array[0].content || '');
             setDate(dream.rows._array[0].date || '');
+            setImagePaths(JSON.parse(dream.rows._array[0].imagePaths) || []);
             setEditingTitle(dream.rows._array[0].title || '');
             setEditingContent(dream.rows._array[0].content || '');
             setEditingDate(dream.rows._array[0].date || '');
@@ -52,7 +55,7 @@ export default function Dream() {
             await updateDream(id, editingTitle, editingContent, editingDate);
             await getDreamEntry();
             setIsEditing(false);
-        } else if(editingTitle.length > 0 && editingContent.length > 0 && editingDate.length > 0) {
+        } else if(editingContent.length > 0 && editingDate.length > 0) {
             setEditingTitle(title);
             setEditingContent(content);
             setEditingDate(date);
@@ -89,12 +92,12 @@ export default function Dream() {
 
     const headerRightButtons = (
         <>
-            <TouchableOpacity style={styles.deleteButton} onPress={isEditing ? handleCancel : () => setConfirmationModalVisible(true)}>
-                <Text style={styles.text}>{isEditing ? 'Cancel' : 'Delete'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={requiredFieldsArePopulated ? styles.editButton : [styles.editButton, styles.disabledButton]} onPress={handleEdit}>
-                <Text style={styles.text}>{isEditing ? 'Save' : 'Edit'}</Text>
-            </TouchableOpacity>
+            <Pressable style={styles.deleteButton}>
+                {isEditing ? <Icon.Button onPress={isEditing ? handleCancel : () => setConfirmationModalVisible(true)} name="ban" size={20} color={COLORS.white} backgroundColor={COLORS.nearBlack} borderRadius={10} iconStyle={{marginRight: 0}}/> : <Icon.Button onPress={isEditing ? handleCancel : () => setConfirmationModalVisible(true)} name="trash" size={20} color={COLORS.white} backgroundColor={COLORS.nearBlack} borderRadius={10} iconStyle={{marginRight: 0}}/>}
+            </Pressable>
+            <Pressable disabled={requiredFieldsArePopulated} style={styles.editButton}>
+                {isEditing ? <Icon.Button onPress={handleEdit} name="save" size={20} color={COLORS.white} backgroundColor={COLORS.nearBlack} borderRadius={10} iconStyle={{marginRight: 0}}/> : <Icon.Button onPress={handleEdit} name="edit" size={20} color={COLORS.white} backgroundColor={COLORS.nearBlack} borderRadius={10} iconStyle={{marginRight: 0}}/>}
+            </Pressable>
         </>
     );
 
@@ -152,6 +155,11 @@ export default function Dream() {
                 {dreamTitle}
                 {title && title.length > 0 ? <Text style={styles.date}>{new Date(date).toLocaleDateString()}</Text> : null}
                 {dreamContent}
+                <ScrollView horizontal={true} style={styles.images}>
+                    {imagePaths && imagePaths.map((imagePath, index) => (
+                        <Image key={index} source={{ uri: imagePath }} style={styles.image} />
+                    ))}
+                </ScrollView>
             </SafeAreaView>
         </>
     )
