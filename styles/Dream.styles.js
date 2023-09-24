@@ -10,12 +10,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         color: COLORS.white,
-        fontFamily: 'monospace'
+        fontFamily: 'monospace',
     },
     content: {
         color: COLORS.white,
         fontFamily: 'monospace',
-        marginTop: 30,
+        marginTop: 20,
         marginBottom: 15,
         borderRadius: 10,
         backgroundColor: COLORS.nearBlack,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         opacity: 0.8,
         color: COLORS.white,
         fontFamily: 'monospace',
-        paddingTop: 10
+        marginBottom: 10
     },
     text: {
         color: COLORS.white,

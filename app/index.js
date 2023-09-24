@@ -8,7 +8,7 @@ export default function Home() {
         <>
             <Stack.Screen
                 options={{
-                    headerTitle: 'My Dreams'
+                    headerTitle: ''
                 }}
             />
             <SafeAreaView style={styles.container}>

@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import styles from './DreamPreview.styles';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import ImageScrollView from '../ImageScrollView/ImageScrollView';
 
 export default function DreamPreview(props) {
 
@@ -61,17 +62,17 @@ export default function DreamPreview(props) {
             <View style={selected ? [styles.container, styles.selectedContainer] : styles.container}>
                 {modalVisible && dreamOptionsModal}
                 <Pressable onPress={() => router.push(`/dream/${props.id}`)} onLongPress={longPressDream}>
-                    <View style={styles.header}>
-                        <Text style={styles.title}>{props.title || new Date(props.date).toLocaleDateString()}</Text>
-                    </View>
-                    {props.title && <Text style={styles.date}>{new Date(props.date).toLocaleDateString()}</Text>}
+                    <Text style={styles.date}>{new Date(props.date).toDateString()}</Text>
+                    {props.title && (
+                        <View style={styles.header}>
+                            <Text style={styles.title}>{props.title}</Text>
+                        </View>
+                    )}
                     <Text numberOfLines={3} style={styles.text}>{props.content || 'Empty'}</Text>
                 </Pressable>
-                <ScrollView horizontal={true} style={styles.images}>
-                    {props.imagePaths && JSON.parse(props.imagePaths).map((imagePath, index) => (
-                        <Image key={index} source={{ uri: imagePath }} style={styles.image} />
-                    ))}
-                </ScrollView>
+                <View style={styles.imagesContainer}>
+                    <ImageScrollView imagePaths={JSON.parse(props.imagePaths)} />
+                </View>
             </View>
         </>
     )

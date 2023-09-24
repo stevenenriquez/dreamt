@@ -7,6 +7,7 @@ import { COLORS } from "../../constants/theme";
 import { updateDream, deleteDream } from "../../utils/db";
 import ConfirmationModal from "../../components/ConfirmationModal/ConfirmationModal";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ImageScrollView from "../../components/ImageScrollView/ImageScrollView";
 
 export default function Dream() {
     const { id } = useLocalSearchParams();
@@ -104,15 +105,15 @@ export default function Dream() {
     const dreamTitle = isEditing ? (
         <TextInput
             style={[styles.title, styles.editingTitle]}
-            placeholder="Title"
-            placeholderTextColor={COLORS.white}
+            placeholder="Untitled"
+            placeholderTextColor={COLORS.lightGray}
             value={editingTitle}
             onChangeText={setEditingTitle}
             editable={isEditing}
             multiline={true}
         />
     ) : (
-        <Text selectable style={styles.title}>{title && title.length > 0 ? title : new Date(date).toLocaleDateString()}</Text>
+        title && title.length > 0 && <Text selectable style={styles.title}>{title}</Text>
     );
 
     const dreamContent = isEditing ? (
@@ -152,13 +153,11 @@ export default function Dream() {
                     />
             }
             <SafeAreaView style={styles.container}>
-                {dreamTitle}
-                {title && title.length > 0 ? <Text style={styles.date}>{new Date(date).toLocaleDateString()}</Text> : null}
-                {dreamContent}
-                <ScrollView horizontal={true} style={styles.images}>
-                    {imagePaths && imagePaths.map((imagePath, index) => (
-                        <Image key={index} source={{ uri: imagePath }} style={styles.image} />
-                    ))}
+                <ScrollView>
+                    <Text style={styles.date}>{new Date(date).toDateString()}</Text>
+                    {dreamTitle}
+                    {dreamContent}
+                    <ImageScrollView imagePaths={imagePaths} />
                 </ScrollView>
             </SafeAreaView>
         </>

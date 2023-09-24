@@ -17,6 +17,9 @@ const styles = StyleSheet.create({
         padding: 20,
         margin: 6
     },
+    imagesContainer: {
+        marginTop: 10
+    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -30,10 +33,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     date: {
-        opacity: 0.5,
-        color: COLORS.white,
+        color: COLORS.lightGray,
         fontFamily: FONT.family,
-        marginBottom: 20
+        marginBottom: 10
     },
     text: {
         color: COLORS.white,
