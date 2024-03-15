@@ -2,7 +2,7 @@ import { View, TextInput, Pressable, Text, ScrollView } from "react-native";
 import { COLORS, FONT } from "../../constants/theme";
 import { StyleSheet } from "react-native";
 
-const filters = ["Lucid 👁", "Recurring ♻️", "Nightmare 👹", "False Awakening 😵‍💫", "Sleep Paralysis 😶‍🌫️"];
+const filters = ["Favorites ✨", "Lucid 👁", "Recurring ♻️", "Nightmare 👹", "False Awakening 😵‍💫", "Sleep Paralysis 😶‍🌫️"];
 
 export default function DreamFilters(props) {
 

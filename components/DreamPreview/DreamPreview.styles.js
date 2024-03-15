@@ -3,13 +3,12 @@ import { COLORS, FONT } from "../../constants/theme";
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: COLORS.nearBlack,
+    backgroundColor: COLORS.darkGray,
         borderWidth: 1,
-        borderColor: COLORS.gray,
         borderRadius: 20,
-        padding: 20,
-        margin: 6,
-        marginBottom: 15
+        padding: 15,
+        margin: 3,
+        marginBottom: 5
     },
     selectedContainer: {
         backgroundColor: COLORS.gray,
@@ -35,10 +34,12 @@ const styles = StyleSheet.create({
     date: {
         color: COLORS.lightGray,
         fontFamily: FONT.family,
-        marginBottom: 10
+        marginBottom: 10,
+        marginLeft: 'auto',
+        fontSize: 12
     },
     text: {
-        color: COLORS.white,
+        color: COLORS.lightGray,
         fontFamily: FONT.family,
     },
     button: {

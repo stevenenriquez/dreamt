@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from './DreamPreview.styles';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import ImageScrollView from '../ImageScrollView/ImageScrollView';
+import { formatDistanceToNow } from 'date-fns';
 
 export default function DreamPreview(props) {
 
@@ -62,13 +63,13 @@ export default function DreamPreview(props) {
             <View style={selected ? [styles.container, styles.selectedContainer] : styles.container}>
                 {modalVisible && dreamOptionsModal}
                 <Pressable onPress={() => router.push(`/dream/${props.id}`)} onLongPress={longPressDream}>
-                    <Text style={styles.date}>{new Date(props.date).toDateString()}</Text>
+                    <Text style={styles.date}>{formatDistanceToNow(new Date(props.date), { addSuffix: true })}</Text>
                     {props.title && (
                         <View style={styles.header}>
-                            <Text style={styles.title}>{props.title}</Text>
+                            <Text numberOfLines={2} style={styles.title}>{props.title}</Text>
                         </View>
                     )}
-                    <Text numberOfLines={3} style={styles.text}>{props.content || 'Empty'}</Text>
+                    <Text numberOfLines={2} style={styles.text}>{props.content || 'Empty'}</Text>
                 </Pressable>
                 <View style={styles.imagesContainer}>
                     <ImageScrollView imagePaths={JSON.parse(props.imagePaths)} />
