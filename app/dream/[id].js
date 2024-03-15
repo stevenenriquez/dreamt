@@ -138,6 +138,10 @@ export default function Dream() {
             <Stack.Screen
                 options={{
                     headerTitle: isEditing ? 'Editing' : '',
+                    headerStyle: {
+                        backgroundColor: COLORS.backgroundPrimary,
+                        color: COLORS.textPrimary
+                    },
                     headerRight: () => (
                         requiredFieldsArePopulated && headerRightButtons
                     ),

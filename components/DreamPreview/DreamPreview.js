@@ -1,4 +1,4 @@
-import { Pressable, Text, View, Modal, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { Pressable, Text, View, Modal, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import styles from './DreamPreview.styles';

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Text, TouchableOpacity, TextInput, ScrollView, SafeAreaView, View, Image, Pressable } from 'react-native';
 import { Stack, router } from 'expo-router';
 import styles from '../../styles/AddDream.styles';
-import { COLORS } from '../../constants/theme';
+import { COLORS, FONT } from '../../constants/theme';
 import { createDream } from '../../utils/db';
 import { DatePickerModal } from 'react-native-paper-dates';
 import { MD3DarkTheme, PaperProvider, Portal } from 'react-native-paper';
@@ -11,8 +11,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DreamCategories from '../../components/DreamCategories/DreamCategories';
 import Slider from '@react-native-community/slider';
 import * as FileSystem from 'expo-file-system';
+import { MaterialIcons } from '@expo/vector-icons';
 
-export default function AddPage() {
+export default function Tab() {
     
     const [title, setTitle] = useState('');
     const [date, setDate] = useState(new Date());
@@ -24,7 +25,7 @@ export default function AddPage() {
     const [content, setContent] = useState('');
     const [images, setImages] = useState([]);
     
-    // Just for temporary testing
+    // Just for temporary testing, remove this later
     const getRandomInt = (max) => {
         return Math.floor(Math.random() * Math.floor(max));
     }
@@ -55,9 +56,12 @@ export default function AddPage() {
     const addDream = async () => {
         try {
             const storedImages = await storeImages();
-            // TODO: route to dream page after adding dream
-            await createDream(title, content, date.toISOString(), JSON.stringify(storedImages), JSON.stringify(tags), clarity, notes);
-            router.push('/');
+            const dream = await createDream(title, content, date.toISOString(), JSON.stringify(storedImages), JSON.stringify(tags), clarity, notes);
+            if(dream && dream.insertId && dream.insertId > 0) {
+                router.replace('/dream/' + dream.insertId);
+            } else {
+                console.error('Error adding dream: ', dream);
+            }
         } catch (error) {
             console.error('Error adding dream: ', error);
         }
@@ -127,8 +131,9 @@ export default function AddPage() {
         <Pressable
             style={requiredFieldsArePopulated ? styles.button : [styles.button, styles.disabledButton]}
             disabled={!requiredFieldsArePopulated}
+            onPress={addDream}
         >
-            <Icon.Button onPress={addDream} name="save" size={20} color={COLORS.white} backgroundColor={COLORS.black} borderRadius={10} iconStyle={{marginRight: 0}}/>
+            <MaterialIcons size={28} name="save-alt" color={COLORS.white} />
         </Pressable>
     );
 
@@ -153,6 +158,17 @@ export default function AddPage() {
                     headerRight: () => (
                         headerRightButton
                     ),
+                    headerStyle: {
+                        backgroundColor: COLORS.backgroundPrimary,
+                        color: COLORS.textPrimariy
+                    },
+                    headerShadowVisible: false,
+                    headerTintColor: COLORS.white,
+                    headerTitleStyle: {
+                        color: COLORS.white,
+                        fontFamily: FONT.family
+                    },
+                    animation: 'fade',
                 }}
             />
             <SafeAreaView style={styles.container}>

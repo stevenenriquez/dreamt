@@ -33,8 +33,16 @@ export const getDream = id => {
     return executeSql('SELECT * FROM dreams WHERE id = ?', [id]);
 }
 
+export const getDreamsPaginated = (page, pageSize) => {
+  let sanitizedPage = Math.max(1, page);
+  let sanitizedPageSize = Math.max(1, pageSize);
+
+  const offset = (sanitizedPage - 1) * sanitizedPageSize;
+  return executeSql('SELECT * FROM dreams ORDER BY date DESC LIMIT ? OFFSET ?', [sanitizedPageSize, offset]);
+};
+
 export const getAllDreams = () => {
-    return executeSql('SELECT * FROM dreams');
+    return executeSql('SELECT * FROM dreams ORDER BY date DESC');
 }
 
 export const createDreamTable = () => {

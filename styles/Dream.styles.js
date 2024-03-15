@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../constants/theme';
+import { COLORS, FONT } from '../constants/theme';
 
 const styles = StyleSheet.create({
     container: {
@@ -10,11 +10,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         color: COLORS.white,
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
     },
     content: {
         color: COLORS.white,
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
         marginTop: 20,
         marginBottom: 15,
         borderRadius: 10,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     },
     editingContent: {
         color: COLORS.white,
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
         marginTop: 30,
         maxHeight: '50%',
         borderRadius: 10,
@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
     date: {
         opacity: 0.8,
         color: COLORS.white,
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
         marginBottom: 10
     },
     text: {
         color: COLORS.white,
-        fontFamily: 'monospace',
+        fontFamily: FONT.family,
     },
     editButton: {
         marginRight: 5,
