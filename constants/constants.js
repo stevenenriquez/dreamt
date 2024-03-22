@@ -6,4 +6,8 @@ const DATABASE = {
   NAME: 'dreamt.db'
 };
 
-export { APP, DATABASE };
+const PATH = {
+  DREAM: '/dream',
+}
+
+export { APP, DATABASE, PATH };

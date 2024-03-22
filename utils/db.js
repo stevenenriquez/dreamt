@@ -86,17 +86,27 @@ export const getAllDreams = async () => {
   return await db.execAsync('SELECT * FROM dreams ORDER BY date DESC');
 };
 
+// TODO: Add everything to a transaction, ensure all queries are successful before committing
 export const createDream = async (
   title,
   content,
   date,
   imagePaths,
   clarity,
-  notes
+  notes,
+  tags
 ) => {
   const dream = await db.runAsync(
     `INSERT INTO dreams (title, content, date, imagePaths, clarity, notes) VALUES (\'${title}\', \'${content}\', \'${date}\', \'${imagePaths}\', ${clarity}, \'${notes}\')`
   );
+
+  if (tags && tags.length > 0) {
+    await createTags(tags);
+    const dreamTags = await checkIfTagsExist(tags);
+    const dreamTagIds = dreamTags.map((tag) => tag.id);
+    await createDreamTags(dream.lastInsertRowId, dreamTagIds);
+  }
+
   return dream;
 };
 

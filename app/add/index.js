@@ -13,11 +13,7 @@ import { Stack, router } from 'expo-router';
 import styles from '../../styles/AddDream.styles';
 import { COLORS, FONT } from '../../constants/theme';
 import {
-  checkIfTagsExist,
   createDream,
-  createDreamTags,
-  createTags,
-  getTags
 } from '../../utils/db';
 import { DatePickerModal } from 'react-native-paper-dates';
 import { MD3DarkTheme, PaperProvider, Portal } from 'react-native-paper';
@@ -25,8 +21,10 @@ import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DreamCategories from '../../components/DreamCategories/DreamCategories';
 import Slider from '@react-native-community/slider';
-import * as FileSystem from 'expo-file-system';
 import { MaterialIcons } from '@expo/vector-icons';
+import { storeImages } from '../../utils/fileSystem';
+import { PATH } from '../../constants/constants';
+import BounceButton from '../../components/BounceButton/BounceButton';
 
 export default function Tab() {
   const [title, setTitle] = useState('');
@@ -37,56 +35,28 @@ export default function Tab() {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [content, setContent] = useState('');
   const [images, setImages] = useState([]);
+  const [adjustingClarity, setAdjustingClarity] = useState(false);
+  const [toggleNote, setToggleNote] = useState(false);
 
-  // Just for temporary testing, remove this later
-  const getRandomInt = (max) => {
-    return Math.floor(Math.random() * Math.floor(max));
-  };
+  let clarityTimeout;
 
   const requiredFieldsArePopulated = content && content.length > 0;
 
-  const storeImages = async () => {
-    try {
-      const storedImages = await Promise.all(
-        images.map(async (imgUri, index) => {
-          const imgName = `dream-${getRandomInt(10000)}-image-${index}.jpg`;
-          const imgInfo = await FileSystem.getInfoAsync(imgUri);
-          if (imgInfo.exists && imgInfo.isDirectory === false) {
-            await FileSystem.copyAsync({
-              from: imgUri,
-              to: `${FileSystem.documentDirectory}${imgName}`
-            });
-          }
-          return `${FileSystem.documentDirectory}${imgName}`;
-        })
-      );
-      return storedImages;
-    } catch (error) {
-      console.error('Error storing images: ', error);
-    }
-  };
-
   const addDream = async () => {
     try {
-      const ALL_TAGS = await getTags();
-      const storedImages = await storeImages();
+      const storedImages = images?.length > 0 ? await storeImages(images) : [];
       const dream = await createDream(
         title,
         content,
         date.toISOString(),
         JSON.stringify(storedImages),
         clarity,
-        notes
+        notes,
+        tags
       );
-      if (tags.length > 0) {
-        await createTags(tags);
-        const dreamTags = await checkIfTagsExist(tags);
-        const dreamTagIds = dreamTags.map((tag) => tag.id);
-        await createDreamTags(dream.lastInsertRowId, dreamTagIds);
-      }
-      console.log('Dream: ' + JSON.stringify(dream, null, 4));
-      if (dream && dream.lastInsertRowId && dream.lastInsertRowId > 0) {
-        router.replace('/dream/' + dream.lastInsertRowId);
+      
+      if (dream?.lastInsertRowId > 0) {
+        router.replace(PATH.DREAM + '/' + dream.lastInsertRowId);
       } else {
         console.error('Error adding dream: ', dream);
       }
@@ -177,6 +147,21 @@ export default function Tab() {
     </Pressable>
   );
 
+  // TODO: move this into utils.js and generalize it
+  const debounce = (callback) => {
+    return () => {
+      clearTimeout(clarityTimeout);
+      clarityTimeout = setTimeout(() => {
+        callback();
+      }, 200);
+    };
+  }
+
+  const onClaritySlidingComplete = () => {
+    clearTimeout(clarityTimeout);
+    setAdjustingClarity(false);
+  }
+
   const portalTheme = {
     ...MD3DarkTheme,
     colors: {
@@ -230,6 +215,15 @@ export default function Tab() {
             />
           </Portal>
         </PaperProvider>
+        {adjustingClarity && (  
+          <View style={styles.clarityImageContainer}>
+            <Image
+              source={require('../../assets/clarity.png')}
+              style={styles.clarityImage}
+              blurRadius={clarity === 5 ? 0 : 5 - clarity}
+            />
+          </View>
+        )}
         <ScrollView nestedScrollEnabled={true}>
           <TextInput
             style={styles.title}
@@ -263,12 +257,7 @@ export default function Tab() {
           <DreamCategories tags={tags} setTags={setTags} />
           </View>
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Clarity</Text>
-            <Image
-              source={require('../../assets/clarity.png')}
-              style={styles.clarityImage}
-              blurRadius={clarity === 5 ? 0 : 5 - clarity}
-            />
+            <Text style={styles.sectionTitle}>Vivid</Text>
             <View style={{ flexDirection: 'row', padding: 10 }}>
               <Text
                 style={{
@@ -285,14 +274,17 @@ export default function Tab() {
                 maximumValue={5}
                 minimumTrackTintColor={COLORS.accent}
                 maximumTrackTintColor={COLORS.white}
-                thumbTintColor={COLORS.accent}
+                thumbTintColor={COLORS.white}
                 step={1}
+                tapToSeek={true}
                 value={clarity}
                 onValueChange={setClarity}
+                onSlidingStart={debounce(() => setAdjustingClarity(true), clarityTimeout)}
+                onSlidingComplete={() => onClaritySlidingComplete()}
               />
             </View>
           </View>
-          <View style={styles.section}>
+          {toggleNote && <View style={styles.section}>
             <Text style={styles.sectionTitle}>Notes</Text>
             <TextInput
               style={styles.notes}
@@ -304,7 +296,8 @@ export default function Tab() {
               value={notes}
               onChangeText={setNotes}
             />
-          </View>
+          </View>}
+          {toggleNote ? <BounceButton text="Remove Notes" onPress={() => setToggleNote(false)} /> : <BounceButton text="Add Notes" onPress={() => {setNotes('');setToggleNote(true)}} />}
         </ScrollView>
       </SafeAreaView>
     </>

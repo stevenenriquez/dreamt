@@ -134,6 +134,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center'
   },
+  clarityImageContainer: {
+    flex: 1,
+    zIndex: 9999,
+  },
   clarityImage: {
     width: '100%',
     height: 150,
