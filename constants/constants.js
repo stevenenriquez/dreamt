@@ -1,5 +1,9 @@
 const APP = {
-    NAME: 'Dreamt',
-}
+  NAME: 'Dreamt'
+};
 
-export { APP };
+const DATABASE = {
+  NAME: 'dreamt.db'
+};
+
+export { APP, DATABASE };
