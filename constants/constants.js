@@ -7,7 +7,11 @@ const DATABASE = {
 };
 
 const PATH = {
-  DREAM: '/dream',
-}
+  DREAM: '/dream'
+};
 
-export { APP, DATABASE, PATH };
+const RATE_LIMIT = {
+  IMAGES_PER_DREAM: 3
+};
+
+export { APP, DATABASE, PATH, RATE_LIMIT };

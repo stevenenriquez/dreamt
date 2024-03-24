@@ -89,7 +89,7 @@ export default function DreamPreview(props) {
           </Text>
         </Pressable>
         <View style={styles.imagesContainer}>
-          <ImageScrollView imagePaths={JSON.parse(props.imagePaths)} />
+          <ImageScrollView imagePaths={props.imagePaths ? JSON.parse(props.imagePaths) : []} />
         </View>
         <Text style={styles.tag}>{props.tags}</Text>
       </View>

@@ -24,7 +24,6 @@ export default function DreamList(props) {
   };
 
   const resetList = async () => {
-    console.log('resetList');
     await clearList();
     if (props.searchText) {
       getPaginated(props.searchText);
@@ -34,7 +33,6 @@ export default function DreamList(props) {
   };
 
   useEffect(() => {
-    console.log('useEffect');
     if (props.searchText) {
       const myTimeout = setTimeout(async () => {
         await clearList();

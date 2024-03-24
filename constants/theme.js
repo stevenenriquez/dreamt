@@ -48,4 +48,18 @@ const SPACING = {
   xxlarge: 30
 };
 
-export { COLORS, FONT, SPACING };
+const StackScreenBaseOptions = {
+  headerStyle: {
+    backgroundColor: COLORS.backgroundPrimary,
+    color: COLORS.textPrimariy
+  },
+  headerShadowVisible: false,
+  headerTintColor: COLORS.white,
+  headerTitleStyle: {
+    color: COLORS.white,
+    fontFamily: FONT.family
+  },
+  animation: 'fade'
+};
+
+export { COLORS, FONT, SPACING, StackScreenBaseOptions };

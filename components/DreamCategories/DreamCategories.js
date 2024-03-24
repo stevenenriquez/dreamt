@@ -12,30 +12,22 @@ const categories = [
   'Sleep Paralysis'
 ];
 
-export default function DreamCategories(props) {
+export default function DreamCategories({tags, setTags}) {
   const [tagSearchText, setTagSearchText] = useState('');
 
   const handleTagSearchTextChange = (text) => {
     setTagSearchText(text);
     if (text.endsWith(' ')) {
       if (
-        text.trim().length > 0 &&
-        !props.tags.includes(text.trim()) &&
-        !text.trim().includes(' ')
+        text.trim().length > 0 && !tags.includes(text.trim()) && !text.trim().includes(' ')
       ) {
-        props.setTags((prevTags) => {
-          let newTags = [...prevTags];
-          newTags.push(text.trim());
-          return newTags;
-        });
+        setTags('tags', [...tags, text.trim()]);
       }
       setTagSearchText('');
     }
   };
 
-  const selectedTags = categories.filter((filter) =>
-    props.tags.includes(filter)
-  );
+  const selectedTags = categories.filter((filter) => tags.includes(filter));
 
   const commonTags = [
     categories.map((category, index) => {
@@ -46,9 +38,9 @@ export default function DreamCategories(props) {
         >
           <BounceToggle
             onPressToggled={() =>
-              props.setTags(props.tags.filter((t) => t !== category))
+              setTags('tags', tags.filter((t) => t !== category))
             }
-            onPressUntoggled={() => props.setTags([...props.tags, category])}
+            onPressUntoggled={() => setTags('tags', [...tags, category])}
             key={`category-${index}`}
             text={category}
             toggled={selectedTags.includes(category)}
@@ -59,37 +51,42 @@ export default function DreamCategories(props) {
     })
   ];
 
-  const tagList =
-    props.tags &&
-    props.tags.length > 0 &&
-    props.tags.map((tag, index) => {
-      if (!categories.includes(tag)) {
-        return (
-          <View
-            style={{ marginHorizontal: 5, marginBottom: 10 }}
-            key={`tag-${index}`}
-          >
-            <BounceButton
-              onPress={() => props.setTags(props.tags.filter((t) => t !== tag))}
-              text={tag}
-            />
-          </View>
-        );
+  const tagList = () => {
+      if(tags && tags.length > 0) {
+        return tags.map((tag, index) => {
+          if (!categories.includes(tag)) {
+            return (
+              <View
+                style={{ marginHorizontal: 5, marginBottom: 10 }}
+                key={`tag-${index}`}
+              >
+                <BounceButton
+                  onPress={() => setTags('tag', tags.filter((t) => t !== tag))}
+                  text={tag}
+                />
+              </View>
+            );
+          }
+        });
+      } else {
+        return null;
       }
-    });
+    }
 
   return (
     <View>
       <ScrollView horizontal={true}>{commonTags}</ScrollView>
-      <Text style={styles.tagTitle}>Tags</Text>
+      {isEditing && <Text style={styles.tagTitle}>Tags 🏷️</Text>}
       <View style={styles.tagList}>{tagList}</View>
-      <TextInput
-        style={styles.tagSearchText}
-        placeholder="type tags separated by a space"
-        placeholderTextColor={COLORS.lightGray}
-        value={tagSearchText}
-        onChangeText={handleTagSearchTextChange}
-      />
+      {isEditing && (
+        <TextInput
+          style={styles.tagSearchText}
+          placeholder="type tags here separated by a space"
+          placeholderTextColor={COLORS.lightGray}
+          value={tagSearchText}
+          onChangeText={handleTagSearchTextChange}
+        />
+      )}
     </View>
   );
 }
@@ -113,7 +110,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 10,
     padding: 5,
-    opacity: 0.8,
     fontFamily: FONT.family
   },
   tagText: {
@@ -131,9 +127,7 @@ const styles = StyleSheet.create({
   tagSearchText: {
     color: COLORS.white,
     fontFamily: FONT.family,
-    padding: 5,
-    borderBottomColor: COLORS.darkGray,
-    borderBottomWidth: 2
+    padding: 5
   },
   category: {
     backgroundColor: COLORS.gray,

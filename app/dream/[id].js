@@ -1,84 +1,65 @@
-import { useLocalSearchParams, Stack, router } from 'expo-router';
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  TextInput,
-  ScrollView,
-  SafeAreaView,
-  Pressable,
-  Image
-} from 'react-native';
-import { getDream } from '../../utils/db';
-import styles from '../../styles/Dream.styles';
-import { useEffect, useState } from 'react';
-import { COLORS } from '../../constants/theme';
-import { updateDream, deleteDream } from '../../utils/db';
+import { useState, useEffect } from 'react';
+import { View, Text, ActivityIndicator, StyleSheet, Pressable } from 'react-native';
+import { Stack, useLocalSearchParams, router } from 'expo-router';
+import { deleteDream, getDream, updateDream } from '../../utils/db';
+import DreamLayout from '../../components/DreamLayout/DreamLayout';
+import { COLORS, FONT } from '../../constants/theme';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import ImageScrollView from '../../components/ImageScrollView/ImageScrollView';
 
-export default function Dream() {
+export default function DreamPage() {
   const { id } = useLocalSearchParams();
 
-  const [title, setTitle] = useState('');
-  const [editingTitle, setEditingTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [editingContent, setEditingContent] = useState('');
-  const [date, setDate] = useState('');
-  const [editingDate, setEditingDate] = useState('');
-  const [imagePaths, setImagePaths] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [confirmationModalVisible, setConfirmationModalVisible] =
-    useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [dream, setDream] = useState({
+    id: null,
+    title: [],
+    date: new Date(),
+    tags: [],
+    notes: '',
+    clarity: 3,
+    content: '',
+    images: []
+  });
+  const [confirmationModalVisible, setConfirmationModalVisible] = useState(false);
 
-  const requiredFieldsArePopulated =
-    content && content.length > 0 && date.length > 0;
+  const requiredFieldsArePopulated = dream.content && dream.content.length > 0;
 
-  const getDreamEntry = async () => {
+  const retrieveDream = async () => {
     setIsLoading(true);
-    const dream = await getDream(id);
-    if (dream && dream.id > 0) {
-      setTitle(dream.title || '');
-      setContent(dream.content || '');
-      setDate(dream.date || '');
-      setImagePaths(JSON.parse(dream.imagePaths) || []);
-      setEditingTitle(dream.title || '');
-      setEditingContent(dream.content || '');
-      setEditingDate(dream.date || '');
+    const retrievedDream = await getDream(id);
+    if(retrievedDream && retrievedDream.id > 0) {
+      setDream(prevDream => ({
+        ...prevDream,
+        ...retrievedDream,
+        tags: retrievedDream.tags.split(',')
+      }));
     }
     setIsLoading(false);
-  };
+  }
 
   const handleEdit = async () => {
-    if (isEditing) {
-      if (editingTitle.length === 0) {
-        setEditingTitle(title);
+    if(isEditing) {
+      if(dream.id > 0) {
+        setIsLoading(true);
+        try {
+          await updateDream(dream);
+        } catch (error) {
+          console.error(`Error editing dream (ID: ${dream.id}): ${error}`);
+        }
+        setIsEditing(false);
+        setIsLoading(false);
       }
-      if (editingContent.length === 0) {
-        setEditingContent(content);
-      }
-      if (!editingDate) {
-        setEditingDate(date);
-      }
-      await updateDream(id, editingTitle, editingContent, editingDate);
-      await getDreamEntry();
-      setIsEditing(false);
-    } else if (editingContent.length > 0 && editingDate.length > 0) {
-      setEditingTitle(title);
-      setEditingContent(content);
-      setEditingDate(date);
-      setIsEditing(true);
-    }
-  };
+  } else {
+    setIsEditing(true);
+  }
+}
 
   const handleCancel = () => {
     setIsEditing(false);
-    setEditingTitle(title);
-    setEditingContent(content);
-    setEditingDate(date);
-  };
+    retrieveDream(id);
+  }
 
   const handleDelete = async () => {
     setConfirmationModalVisible(false);
@@ -91,15 +72,8 @@ export default function Dream() {
   };
 
   useEffect(() => {
-    getDreamEntry();
+    retrieveDream(id);
   }, []);
-
-  if (isLoading)
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color={COLORS.white} />
-      </View>
-    );
 
   const headerRightButtons = (
     <>
@@ -159,52 +133,18 @@ export default function Dream() {
     </>
   );
 
-  const dreamTitle = isEditing ? (
-    <TextInput
-      style={[styles.title, styles.editingTitle]}
-      placeholder="Untitled"
-      placeholderTextColor={COLORS.lightGray}
-      value={editingTitle}
-      onChangeText={setEditingTitle}
-      editable={isEditing}
-      multiline={true}
-    />
-  ) : (
-    title &&
-    title.length > 0 && (
-      <Text selectable style={styles.title}>
-        {title}
-      </Text>
-    )
-  );
-
-  const dreamContent = isEditing ? (
-    <TextInput
-      style={[styles.editingContent, styles.editingField]}
-      placeholder="Last Night I.."
-      placeholderTextColor={COLORS.white}
-      value={editingContent}
-      multiline={true}
-      onChangeText={setEditingContent}
-      scrollEnabled={true}
-      editable={isEditing}
-    />
-  ) : (
-    <ScrollView style={styles.content}>
-      <Text selectable style={styles.text}>
-        {content}
-      </Text>
-    </ScrollView>
-  );
-
   return (
     <>
       <Stack.Screen
         options={{
           headerTitle: isEditing ? 'Editing' : '',
+          headerTitleStyle: {
+            color: COLORS.white,
+            fontFamily: FONT.family
+          },
           headerStyle: {
             backgroundColor: COLORS.backgroundPrimary,
-            color: COLORS.textPrimary
+            color: COLORS.white
           },
           headerRight: () => requiredFieldsArePopulated && headerRightButtons
         }}
@@ -218,14 +158,38 @@ export default function Dream() {
           modalActionText="Delete"
         />
       )}
-      <SafeAreaView style={styles.container}>
-        <ScrollView>
-          <Text style={styles.date}>{new Date(date).toDateString()}</Text>
-          {dreamTitle}
-          {dreamContent}
-          <ImageScrollView imagePaths={imagePaths} />
-        </ScrollView>
-      </SafeAreaView>
+      {isLoading ? (
+        <View style={styles.container}>
+          <ActivityIndicator size='large' color={COLORS.white} />
+        </View>
+      ) : (
+        dream.id > 0 ? (
+          <DreamLayout dream={dream} setDream={setDream} handleSave={isEditing ? handleEdit : null} isEditing={isEditing} />
+        ) : <Dream404 />
+      )}
     </>
-  );
+  )
 }
+
+// move to this file
+const Dream404 = () => {
+  return (
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text style={{color: COLORS.white}}>Dream Not Found</Text>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.black,
+    padding: 20
+  },
+  deleteButton: {
+    marginRight: 25
+  },
+  editButton: {
+    marginRight: 5
+  }
+});

@@ -45,7 +45,14 @@ export const resetDB = async () => {
 };
 
 export const getDream = async (id) => {
-  return await db.getFirstAsync(`SELECT * FROM dreams WHERE id = ${id}`);
+  return await db.getFirstAsync(`
+    SELECT d.*, GROUP_CONCAT(t.name) as tags 
+    FROM dreams d 
+    LEFT JOIN dream_tags dt on d.id = dt.dream_id
+    LEFT JOIN tags t ON dt.tag_id = t.id
+    WHERE d.id IS ${id}
+    GROUP BY d.id, d.title, d.content, d.date, d.imagePaths, d.clarity, d.notes, d.favorite
+  `);
 };
 
 export const getDreamsPaginated = async (page, pageSize, searchText) => {
@@ -88,32 +95,38 @@ export const getAllDreams = async () => {
 
 // TODO: Add everything to a transaction, ensure all queries are successful before committing
 export const createDream = async (
-  title,
-  content,
-  date,
-  imagePaths,
-  clarity,
-  notes,
-  tags
+  dream, storedImages
 ) => {
-  const dream = await db.runAsync(
-    `INSERT INTO dreams (title, content, date, imagePaths, clarity, notes) VALUES (\'${title}\', \'${content}\', \'${date}\', \'${imagePaths}\', ${clarity}, \'${notes}\')`
+  const createdDream = await db.runAsync(
+    `INSERT INTO dreams (title, content, date, imagePaths, clarity, notes) VALUES (\'${dream.title}\', \'${dream.content}\', \'${dream.date.toISOString()}\', \'${storedImages}\', ${dream.clarity}, \'${dream.notes}\')`
+  );
+
+  if (dream.tags && dream.tags.length > 0) {
+    await createTags(dream.tags);
+    const dreamTags = await checkIfTagsExist(dream.tags);
+    const dreamTagIds = dreamTags.map((tag) => tag.id);
+    await createDreamTags(createdDream.lastInsertRowId, dreamTagIds);
+  }
+
+  return createdDream;
+};
+
+export const updateDream = async ({id, title, content, date, tags}) => {
+  await db.runAsync(
+    `UPDATE dreams SET title = \'${title}\', content = \'${content}\', date = \'${date}\' WHERE id = ${id}`
   );
 
   if (tags && tags.length > 0) {
     await createTags(tags);
     const dreamTags = await checkIfTagsExist(tags);
     const dreamTagIds = dreamTags.map((tag) => tag.id);
-    await createDreamTags(dream.lastInsertRowId, dreamTagIds);
+    const existingDreamTags = await getDreamTags(id);
+    const existingDreamTagIds = existingDreamTags.map((tag) => tag.id);
+    const dreamTagsToCreate = dreamTagIds.filter((tagId) => !existingDreamTagIds.includes(tagId));
+    const dreamTagsToDelete = existingDreamTagIds.filter((tagId) => !dreamTagIds.includes(tagId));
+    await createDreamTags(id, dreamTagsToCreate);
+    await deleteDreamTags(id, dreamTagsToDelete);
   }
-
-  return dream;
-};
-
-export const updateDream = async (id, title, content, date) => {
-  return await db.runAsync(
-    `UPDATE dreams SET title = \'${title}\', content = \'${content}\', date = \'${date}\' WHERE id = ${id}`
-  );
 };
 
 export const deleteDream = async (id) => {
@@ -156,10 +169,25 @@ export const createTags = async (tags) => {
   }
 };
 
+export const getDreamTags = async (dreamId) => {
+  return await db.getAllAsync(
+    `SELECT t.id, t.name FROM tags t JOIN dream_tags dt ON t.id = dt.tag_id WHERE dt.dream_id = ${dreamId}`
+  );
+}
+
 export const createDreamTags = async (dreamId, tagIds) => {
-  const values = tagIds.map((tagId) => `(${dreamId}, \"${tagId}\")`).join(',');
+  if(dreamId > 0 && tagIds.length > 0) {
+    const values = tagIds.map((tagId) => `(${dreamId}, \"${tagId}\")`).join(',');
+    return await db.runAsync(
+      `INSERT INTO dream_tags (dream_id, tag_id) VALUES ${values};`
+    );
+  }
+};
+
+export const deleteDreamTags = async (dreamId, tagIds) => {
+  const values = tagIds.map((tagId) => `\"${tagId}\"`).join(',');
   return await db.runAsync(
-    `INSERT INTO dream_tags (dream_id, tag_id) VALUES ${values};`
+    `DELETE FROM dream_tags WHERE dream_id = ${dreamId} AND tag_id IN (${values});`
   );
 };
 

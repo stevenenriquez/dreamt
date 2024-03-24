@@ -2,10 +2,10 @@ import { View, Text } from 'react-native';
 import BounceProvider from '../BounceProvider/BounceProvider';
 import { COLORS, FONT } from '../../constants/theme';
 
-const BounceButton = ({ onPress, text }) => {
+const BounceButton = ({ onPress, text, color }) => {
   return (
     <BounceProvider onPress={onPress}>
-      <View style={styles.button}>
+      <View style={[styles.button, color ? { backgroundColor: color } : null]}>
         <Text style={styles.buttonText}>{text}</Text>
       </View>
     </BounceProvider>
