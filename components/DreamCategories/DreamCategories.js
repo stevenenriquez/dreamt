@@ -12,7 +12,7 @@ const categories = [
   'Sleep Paralysis'
 ];
 
-export default function DreamCategories({tags, setTags}) {
+export default function DreamCategories({tags, setTags, isEditing}) {
   const [tagSearchText, setTagSearchText] = useState('');
 
   const handleTagSearchTextChange = (text) => {
@@ -27,56 +27,70 @@ export default function DreamCategories({tags, setTags}) {
     }
   };
 
-  const selectedTags = categories.filter((filter) => tags.includes(filter));
+  const selectedTags = categories.filter((filter) => tags?.includes(filter)) || [];
 
-  const commonTags = [
-    categories.map((category, index) => {
-      return (
-        <View
-          style={{ marginHorizontal: 5, marginBottom: 10 }}
-          key={`view-${index}`}
-        >
-          <BounceToggle
-            onPressToggled={() =>
-              setTags('tags', tags.filter((t) => t !== category))
-            }
-            onPressUntoggled={() => setTags('tags', [...tags, category])}
-            key={`category-${index}`}
-            text={category}
-            toggled={selectedTags.includes(category)}
-            toggledBackgroundColor={COLORS.accent}
-          />
-        </View>
-      );
-    })
-  ];
-
-  const tagList = () => {
-      if(tags && tags.length > 0) {
-        return tags.map((tag, index) => {
-          if (!categories.includes(tag)) {
-            return (
-              <View
-                style={{ marginHorizontal: 5, marginBottom: 10 }}
-                key={`tag-${index}`}
-              >
-                <BounceButton
-                  onPress={() => setTags('tag', tags.filter((t) => t !== tag))}
-                  text={tag}
-                />
-              </View>
-            );
-          }
-        });
-      } else {
-        return null;
-      }
+  const renderCategoryList = items => {
+    if(items) {
+      const categoryList = items.map((category, index) => {
+        return (
+          <View
+            style={{ marginHorizontal: 5, marginBottom: 10 }}
+            key={`view-${index}`}
+          >
+            <BounceToggle
+              onPressToggled={() => {
+                if(isEditing) {
+                  setTags('tags', tags.filter((t) => t !== category))
+                }
+              }}
+              onPressUntoggled={() => {
+                if(isEditing) {
+                  setTags('tags', [...tags, category])
+                }
+              }}
+              key={`category-${index}`}
+              text={category}
+              toggled={selectedTags.includes(category)}
+              toggledBackgroundColor={COLORS.accent}
+            />
+          </View>
+        );
+      });
+      return categoryList;
     }
+  }
+
+  const renderTagList = () => {
+    if(tags && tags.length > 0) {
+      return tags.filter(tag => !categories.includes(tag)).map((tag, index) => {
+        return (
+          <View
+            style={{ marginHorizontal: 5, marginBottom: 10 }}
+            key={`tag-${index}`}
+          >
+            <BounceButton
+              onPress={() => {
+                if(isEditing) {
+                  setTags('tags', tags.filter((t) => t !== tag))
+                }
+              }}
+              text={tag}
+            />
+          </View>
+        );
+      });
+    } else {
+      return null;
+    }
+  }
+
+  const tagList = renderTagList();
 
   return (
     <View>
-      <ScrollView horizontal={true}>{commonTags}</ScrollView>
-      {isEditing && <Text style={styles.tagTitle}>Tags 🏷️</Text>}
+      {(isEditing || selectedTags && selectedTags.length > 0) && <Text style={styles.metadataTitle}>Categories</Text>}
+      <ScrollView horizontal={true}>{isEditing ? renderCategoryList(categories) : renderCategoryList(categories.filter(category => selectedTags.includes(category)))}</ScrollView>
+      {(isEditing || tagList && tagList.length > 0) && <Text style={styles.metadataTitle}>Tags</Text>}
       <View style={styles.tagList}>{tagList}</View>
       {isEditing && (
         <TextInput
@@ -105,9 +119,9 @@ const styles = StyleSheet.create({
     padding: 1,
     margin: 5
   },
-  tagTitle: {
+  metadataTitle: {
     color: COLORS.white,
-    fontSize: 15,
+    fontSize: 16,
     marginBottom: 10,
     padding: 5,
     fontFamily: FONT.family

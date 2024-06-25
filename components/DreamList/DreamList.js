@@ -5,7 +5,6 @@ import { useState, useCallback, useEffect } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { deleteDream } from '../../utils/db';
 import { getDreamsPaginated } from '../../utils/db';
-import DreamCategoriesStyles from '../DreamCategories/DreamCategories.styles';
 
 export default function DreamList(props) {
   const [data, setData] = useState([]);

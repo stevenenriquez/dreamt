@@ -5,24 +5,17 @@ import {
   ScrollView,
   SafeAreaView,
   View,
-  Image,
-  StyleSheet,
+  StyleSheet
 } from 'react-native';
 import { COLORS, FONT } from '../../constants/theme';
 import DreamCategories from '../DreamCategories/DreamCategories';
-import Slider from '@react-native-community/slider';
-import BounceButton from '../BounceButton/BounceButton';
 import DatePicker from '../DatePicker/DatePicker';
+import Chat from '../Chat/Chat';
 
 export default function DreamLayout({ dream, setDream, isEditing }) {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [adjustingClarity, setAdjustingClarity] = useState(false);
-  const [toggleNote, setToggleNote] = useState(false);
 
   const handleDreamChange = (key, value) => {
-    // if(key === 'tags' && typeof value === 'string') {
-    //   value = value.split(',');
-    // }
     if(dream.hasOwnProperty(key)) {
       setDream((prevDream) => ({
         ...prevDream,
@@ -42,16 +35,7 @@ export default function DreamLayout({ dream, setDream, isEditing }) {
             setDatePickerVisible={setDatePickerVisible}
           />
         )}
-        {isEditing && adjustingClarity && (
-          <View style={styles.clarityImageContainer}>
-            <Image
-              source={require('../../assets/clarity.png')}
-              style={styles.clarityImage}
-              blurRadius={dream.clarity === 5 ? 0 : 5 - dream.clarity}
-            />
-          </View>
-        )}
-        <ScrollView nestedScrollEnabled={true}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent} nestedScrollEnabled={true}>
           <TextInput
             style={styles.title}
             placeholder="Untitled"
@@ -75,67 +59,21 @@ export default function DreamLayout({ dream, setDream, isEditing }) {
               readOnly={!isEditing}
             />
           </View>
-          {/* <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Images</Text>
-                        {uploadedImages}
-                    </View> */}
           <View style={styles.section}>
-            <DreamCategories tags={dream.tags} setTags={handleDreamChange} />
+            <DreamCategories tags={dream.tags || []} setTags={handleDreamChange} isEditing={isEditing} />
           </View>
-          {isEditing && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Clarity 👁</Text>
-              <View style={{ flex: 1, flexDirection: 'space-between' }}>
-                <Slider
-                  style={styles.claritySlider}
-                  minimumValue={1}
-                  maximumValue={5}
-                  minimumTrackTintColor={COLORS.accent}
-                  maximumTrackTintColor={COLORS.white}
-                  thumbTintColor={COLORS.white}
-                  step={1}
-                  tapToSeek={true}
-                  value={dream.clarity}
-                  onValueChange={value => handleDreamChange('clarity', value)}
-                  disabled={!isEditing}
-                  onSlidingStart={() => clarityImageTimeout.debouncedFn()}
-                  onSlidingComplete={() => onClaritySlidingComplete()}
-                />
-              </View>
+          <View style={styles.dreamInterpretation}>
+            <Text style={styles.sectionTitle}>Dream Interpreation ✨</Text>
+            <Text style={styles.interpretationText}>In your dream, you find yourself swimming in a vast, crystal-clear ocean. The water feels warm and comforting, symbolizing your emotional state and the unconscious mind. As you dive deeper, you encounter a sunken ship filled with treasure, representing hidden aspects of yourself or untapped potential waiting to be discovered. Schools of colorful fish dart around you, possibly signifying the diverse thoughts and ideas flowing through your mind. Suddenly, you spot a friendly dolphin that guides you to the surface. This dolphin could represent a supportive figure in your life or your own intuition leading you towards personal growth and enlightenment. Upon reaching the surface, you see a distant island, symbolizing a goal or destination you're striving towards in your waking life. This dream suggests a journey of self-discovery, emotional exploration, and the pursuit of personal aspirations.</Text>
+            <Chat />
+            <TextInput style={styles.message} placeholder="Ask a question..." placeholderTextColor={COLORS.lightGray} multiline={true} numberOfLines={null} textAlignVertical="top" />
+          </View>
+          {/* {!isEditing && <View style={styles.aiButtons}>
+            <View style={styles.aiButton}>
+              <BounceButton text='Interpret' color={COLORS.aiAccent} />
             </View>
-          )}
-          {((isEditing && toggleNote) ||
-            (!isEditing && dream.notes.length > 0)) && (
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Notes</Text>
-                <TextInput
-                  style={styles.notes}
-                  placeholder="Any additional notes"
-                  placeholderTextColor={COLORS.lightGray}
-                  multiline={true}
-                  numberOfLines={5}
-                  textAlignVertical="top"
-                  value={dream.notes}
-                  onChangeText={value => handleDreamChange('notes', value)}
-                  readOnly={!isEditing}
-                />
-              </View>
-            )}
-          {isEditing &&
-            (toggleNote ? (
-              <BounceButton
-                text="Remove Notes"
-                onPress={() => setToggleNote(false)}
-              />
-            ) : (
-              <BounceButton
-                text="Add Notes"
-                onPress={() => {
-                  handleDreamChange('notes', '');
-                  setToggleNote(true);
-                }}
-              />
-            ))}
+            <BounceButton text='Explore' color={COLORS.aiAccent} />
+          </View>} */}
         </ScrollView>
       </SafeAreaView>
     </>
@@ -143,11 +81,34 @@ export default function DreamLayout({ dream, setDream, isEditing }) {
 }
 
 const styles = StyleSheet.create({
+  dreamInterpretation: {
+    backgroundColor: COLORS.aiBackground,
+    padding: 10,
+    borderRadius: 20,
+  },
+  aiButtons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20
+  },
+  aiButton: {
+    marginRight: 15
+  },
+  date: {
+    color: COLORS.lightGray,
+    fontFamily: FONT.family,
+    marginBottom: 10,
+    fontSize: 12
+  },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
     backgroundColor: COLORS.black,
     padding: 20
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
   headerContainer: {
     flex: 1,
@@ -190,7 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10
   },
-  date: {
+  datePicker: {
     color: COLORS.white,
     opacity: 0.7,
     fontFamily: FONT.family,
@@ -212,16 +173,22 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.nearBlack,
     borderWidth: 2
   },
-  notes: {
+  message: {
     fontSize: 15,
     color: COLORS.white,
     fontFamily: FONT.family,
-    padding: 20,
-    borderRadius: 30,
-    height: 200,
+    padding: 15,
+    borderRadius: 20,
+    height: 'auto',
+    maxHeight: 300,
     backgroundColor: COLORS.nearBlack,
-    marginBottom: 20,
-    paddingBottom: 50
+    borderWidth: 2
+  },
+  interpretationText: {
+    fontSize: 15,
+    color: COLORS.aiLightText,
+    fontFamily: FONT.family,
+    padding: 15,
   },
   button: {
     marginRight: 5
@@ -269,15 +236,6 @@ const styles = StyleSheet.create({
     fontFamily: FONT.family,
     fontSize: 15
   },
-  noVideoContainer: {
-    height: 200,
-    width: '100%',
-    borderRadius: 10,
-    borderStyle: 'dashed',
-    backgroundColor: COLORS.black,
-    borderColor: COLORS.gray,
-    borderWidth: 2
-  },
   tagList: {
     marginTop: 5,
     marginBottom: 5
@@ -297,17 +255,5 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontWeight: 'bold',
     alignSelf: 'center'
-  },
-  clarityImageContainer: {
-    flex: 1,
-    zIndex: 9999
-  },
-  clarityImage: {
-    width: '100%',
-    height: 150,
-    borderRadius: 20
-  },
-  claritySlider: {
-    marginBottom: 10
   }
 });

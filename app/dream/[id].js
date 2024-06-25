@@ -33,7 +33,7 @@ export default function DreamPage() {
       setDream(prevDream => ({
         ...prevDream,
         ...retrievedDream,
-        tags: retrievedDream.tags.split(',')
+        tags: retrievedDream?.tags?.split(',')
       }));
     }
     setIsLoading(false);
@@ -171,7 +171,7 @@ export default function DreamPage() {
   )
 }
 
-// move to this file
+// move to separate file
 const Dream404 = () => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

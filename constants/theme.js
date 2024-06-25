@@ -26,7 +26,13 @@ const COLORS = {
   nearBlack: '#0D0D0D',
   darkGray: '#111111',
   gray: '#222222',
-  lightGray: '#666666'
+  lightGray: '#666666',
+
+  aiAccent: '#653eb5',
+  aiBackground: '#160538',
+  aiLightText: '#ad8bf0',
+  
+  messageBackground: '#103e94'
 };
 
 const FONT = {

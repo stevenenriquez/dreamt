@@ -31,13 +31,15 @@
     "plugins": [
       [
         "expo-router"
-      ], [
-        "expo-image-picker", 
+      ],
+      [
+        "expo-image-picker",
         {
           "photosPermission": "Select and upload image(s).",
           "cameraPermission": "Allow Dreamt to access your camera."
         }
-      ]
+      ],
+      "expo-asset"
     ]
   }
 }
