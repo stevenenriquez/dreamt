@@ -4,7 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 export const selectImages = async ({
   selectionLimit = RATE_LIMIT.IMAGES_PER_DREAM,
   images,
-  setImages
+  handleImageSet
 }) => {
   let result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -14,23 +14,20 @@ export const selectImages = async ({
     selectionLimit:
       images?.length < selectionLimit ? selectionLimit - images?.length : 0
   });
-
   if (!result.canceled) {
-    setImages((prevImages) => {
-      let selectedImages = [...prevImages] || [];
-      result.assets.forEach((asset) => {
-        if (
-          selectedImages.length < selectionLimit &&
-          !selectedImages.includes(asset.uri) &&
-          asset.uri?.length > 0
-        ) {
-          selectedImages.push(asset.uri);
-        }
-      });
-      return selectedImages;
+    let selectedImages = [...images] || [];
+    result.assets.forEach((asset) => {
+      if (
+        selectedImages.length < selectionLimit &&
+        !selectedImages.includes(asset.uri) &&
+        asset.uri?.length > 0
+      ) {
+        selectedImages.push(asset.uri);
+      }
     });
+    handleImageSet(selectedImages);
+    }
   }
-};
 
 export const debounce = (callback, timeout) => {
   let timer;

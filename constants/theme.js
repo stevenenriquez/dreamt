@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 const COLORS = {
   primary: '#01224a',
   secondary: '#CDCDD2',
@@ -27,16 +29,23 @@ const COLORS = {
   darkGray: '#111111',
   gray: '#222222',
   lightGray: '#666666',
+  nearWhite: '#F4F4F4',
 
   aiAccent: '#653eb5',
   aiBackground: '#160538',
   aiLightText: '#ad8bf0',
   
-  messageBackground: '#103e94'
+  messageBackground: '#103e94',
+
+  typeBubbleBackground: '#653eb5',
+  tagBubbleBackground: '#103e94',
 };
 
 const FONT = {
-  family: 'monospace',
+  family: Platform.select({
+    ios: 'Times New Roman',
+    android: 'normal',
+  }),
   SIZE: {
     small: 10,
     medium: 15,

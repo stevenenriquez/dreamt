@@ -13,6 +13,7 @@
     "format": "prettier --write '**/*.js'"
   },
   "dependencies": {
+    "@expo/ngrok": "^4.1.0",
     "@react-native-community/slider": "4.5.2",
     "date-fns": "^3.4.0",
     "expo": "^51.0.14",

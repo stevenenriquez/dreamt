@@ -77,8 +77,9 @@ export default function DreamPage() {
 
   const headerRightButtons = (
     <>
-      <Pressable style={styles.deleteButton}>
-        {isEditing ? (
+        {isEditing ? 
+        <>
+        <Pressable style={styles.deleteButton}>
           <Icon.Button
             onPress={
               isEditing ? handleCancel : () => setConfirmationModalVisible(true)
@@ -90,20 +91,22 @@ export default function DreamPage() {
             borderRadius={10}
             iconStyle={{ marginRight: 0 }}
           />
-        ) : (
-          <Icon.Button
-            onPress={
-              isEditing ? handleCancel : () => setConfirmationModalVisible(true)
-            }
-            name="trash"
-            size={20}
-            color={COLORS.white}
-            backgroundColor={COLORS.nearBlack}
-            borderRadius={10}
-            iconStyle={{ marginRight: 0 }}
-          />
-        )}
-      </Pressable>
+          </Pressable>
+          <Pressable style={styles.deleteButton}>
+            <Icon.Button
+              onPress={
+                () => setConfirmationModalVisible(true)
+              }
+              name="trash"
+              size={20}
+              color={COLORS.white}
+              backgroundColor={COLORS.nearBlack}
+              borderRadius={10}
+              iconStyle={{ marginRight: 0 }}
+            />
+          </Pressable>
+          </>
+        : null}
       <Pressable
         disabled={requiredFieldsArePopulated}
         style={styles.editButton}
@@ -140,7 +143,8 @@ export default function DreamPage() {
           headerTitle: isEditing ? 'Editing' : '',
           headerTitleStyle: {
             color: COLORS.white,
-            fontFamily: FONT.family
+            fontFamily: FONT.family,
+            fontWeight: 'bold'
           },
           headerStyle: {
             backgroundColor: COLORS.backgroundPrimary,

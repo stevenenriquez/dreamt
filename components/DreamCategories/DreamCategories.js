@@ -69,6 +69,7 @@ export default function DreamCategories({tags, setTags, isEditing}) {
             key={`tag-${index}`}
           >
             <BounceButton
+              color={COLORS.tagBubbleBackground}
               onPress={() => {
                 if(isEditing) {
                   setTags('tags', tags.filter((t) => t !== tag))
@@ -85,11 +86,10 @@ export default function DreamCategories({tags, setTags, isEditing}) {
   }
 
   const tagList = renderTagList();
-
   return (
     <View>
-      {(isEditing || selectedTags && selectedTags.length > 0) && <Text style={styles.metadataTitle}>Categories</Text>}
-      <ScrollView horizontal={true}>{isEditing ? renderCategoryList(categories) : renderCategoryList(categories.filter(category => selectedTags.includes(category)))}</ScrollView>
+      {(isEditing || selectedTags && selectedTags.length > 0) && <Text style={styles.metadataTitle}>Type</Text>}
+      <View style={styles.tagList}>{isEditing ? renderCategoryList(categories) : renderCategoryList(categories.filter(category => selectedTags.includes(category)))}</View>
       {(isEditing || tagList && tagList.length > 0) && <Text style={styles.metadataTitle}>Tags</Text>}
       <View style={styles.tagList}>{tagList}</View>
       {isEditing && (
@@ -107,23 +107,23 @@ export default function DreamCategories({tags, setTags, isEditing}) {
 
 const styles = StyleSheet.create({
   tagList: {
-    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
+    paddingLeft: 10,
   },
   tag: {
     backgroundColor: COLORS.gray,
     borderRadius: 20,
     padding: 1,
-    margin: 5
+    margin: 5,
   },
   metadataTitle: {
     color: COLORS.white,
-    fontSize: 16,
+    fontSize: FONT.SIZE.large,
+    fontWeight: 'bold',
     marginBottom: 10,
     padding: 5,
+    marginLeft: 10,
     fontFamily: FONT.family
   },
   tagText: {
@@ -141,7 +141,8 @@ const styles = StyleSheet.create({
   tagSearchText: {
     color: COLORS.white,
     fontFamily: FONT.family,
-    padding: 5
+    padding: 5,
+    marginLeft: 15
   },
   category: {
     backgroundColor: COLORS.gray,
